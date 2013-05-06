@@ -25,8 +25,8 @@ import argparse
 import pprint
 
 from mpyq import mpyq
-import protocol23260
-import protocol24944
+import protocol15405
+
 
 class EventLogger:
     def __init__(self):
@@ -74,20 +74,18 @@ if __name__ == '__main__':
 
     # Read the protocol header, this can be read with any protocol
     contents = archive.header['user_data_header']['content']
-    header = protocol23260.decode_replay_header(contents)
+    header = protocol15405.decode_replay_header(contents)
     if args.header:
         logger.log(sys.stdout, header)
 
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
-    if baseBuild == 23260:
-        protocol = protocol23260
-    elif baseBuild == 24944 or baseBuild == 0:
-        protocol = protocol24944
-    else:
+    try:
+        protocol = __import__('protocol%s' % (baseBuild,))
+    except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
-
+        
     # Print protocol details
     if args.details:
         contents = archive.read_file('replay.details')

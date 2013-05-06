@@ -52,5 +52,5 @@ Open sourced under the MIT license. See the included LICENSE file for more infor
 
 The standalone tool uses [mpyq](https://github.com/arkx/mpyq/) to read mopaq files.
 
-Thanks to David Joerg of [ggtracker](http://www.ggtracker.com) for design feedback and beta-testing.
+Thanks to David Joerg and Graylin Kim of [GGTracker](http://www.ggtracker.com) for design feedback and beta-testing.
 

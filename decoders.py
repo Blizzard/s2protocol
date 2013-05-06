@@ -153,7 +153,13 @@ class BitPackedDecoder:
         result = {}
         for field in fields:
             if field[0] == '__parent':
-                result.update(self.instance(field[1]))
+                parent = self.instance(field[1])
+                if isinstance(parent, dict):
+                    result.update(parent)
+                elif len(fields) == 1:
+                    result = parent
+                else:
+                    result[field[0]] = parent
             else:
                 result[field[0]] = self.instance(field[1])
         return result
@@ -260,7 +266,13 @@ class VersionedDecoder:
                 field = fields[field_index]
                 if tag == field[2]:
                     if field[0] == '__parent':
-                        result.update(self.instance(field[1]))
+                        parent = self.instance(field[1])
+                        if isinstance(parent, dict):
+                            result.update(parent)
+                        elif len(fields) == 1:
+                            result = parent
+                        else:
+                            result[field[0]] = parent
                     else:
                         result[field[0]] = self.instance(field[1])
                     field_index += 1
