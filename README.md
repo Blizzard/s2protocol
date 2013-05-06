@@ -1,5 +1,5 @@
 
-# About
+# S2 Protocol
 
 s2protocol is a reference Python library and standalone tool to decode StarCraft II replay files into Python data structures.
 
