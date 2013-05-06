@@ -16,11 +16,9 @@ s2protocol can be used as a base-build-specific library to decode binary blobs, 
 Note that s2protocol does not expose game balance information or provide any kind of high level analysis of replays; it's meant
 to be just the first tool in the chain for your data mining application.
 
-# Supported Base Builds
+# Supported Versions
 
-s2protocol supports StarCraft II replay files that were written with these game versions:
-* Base23260
-* Base24944
+s2protocol supports all StarCraft II replay files that were written with retail versions of the game. The current plan is to support all future publicly released versions, including public betas.
 
 # Tracker events
 
