@@ -20,7 +20,7 @@ to be just the first tool in the chain for your data mining application.
 
 s2protocol supports all StarCraft II replay files that were written with retail versions of the game. The current plan is to support all future publicly released versions, including public betas.
 
-# Tracker events
+# Tracker Events
 
 Some notes on tracker events:
 * Convert unit tag index, recycle pairs into unit tags (as seen in game events) with protocol.unit_tag(index, recycle)
