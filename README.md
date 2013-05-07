@@ -1,4 +1,3 @@
-
 # S2 Protocol
 
 s2protocol is a reference Python library and standalone tool to decode StarCraft II replay files into Python data structures.
@@ -26,6 +25,7 @@ Some notes on tracker events:
 * Tracker events are new in version 2.0.8, they do not exist in replays recorded with older versions of the game.
 * Convert unit tag index, recycle pairs into unit tags (as seen in game events) with protocol.unit_tag(index, recycle)
 * Interpret the NNet.Replay.Tracker.SUnitPositionsEvent events like this:
+
 ```python
     unitIndex = event['m_firstUnitIndex']
     for i in xrange(0, len(event['m_items']), 3):
