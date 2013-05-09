@@ -24,14 +24,14 @@ import sys
 import argparse
 import pprint
 
-from mpyq import mpyq
-import protocol15405
+import mpyq
+from s2protocol import protocol15405
 
 
 class EventLogger:
     def __init__(self):
         self._event_stats = {}
-        
+
     def log(self, output, event):
         # update stats
         if '_event' in event and '_bits' in event:
@@ -41,11 +41,11 @@ class EventLogger:
             self._event_stats[event['_event']] = stat
         # write structure
         pprint.pprint(event, stream=output)
-        
+
     def log_stats(self, output):
         for name, stat in sorted(self._event_stats.iteritems(), key=lambda x: x[1][1]):
             print >> output, '"%s", %d, %d,' % (name, stat[0], stat[1] / 8)
-    
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     archive = mpyq.MPQArchive(args.replay_file)
-    
+
     logger = EventLogger()
 
     # Read the protocol header, this can be read with any protocol
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
-        
+
     # Print protocol details
     if args.details:
         contents = archive.read_file('replay.details')
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         contents = archive.read_file('replay.attributes.events')
         attributes = protocol.decode_replay_attributes_events(contents)
         logger.log(sys.stdout, attributes)
-        
+
     # Print stats
     if args.stats:
         logger.log_stats(sys.stderr)
