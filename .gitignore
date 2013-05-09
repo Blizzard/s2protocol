@@ -3,6 +3,8 @@
 
 *.SC2Replay
 
+build
+docs/_build
 env
 dist
 *.egg-info

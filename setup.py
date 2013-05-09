@@ -12,18 +12,21 @@ setup(
     packages=[
         's2protocol',
     ],
+    scripts=['s2protocol/s2_cli.py'],
     classifiers=[
-      'Development Status :: 5 - Production/Stable',
-      'Environment :: Console',
-      'Intended Audience :: End Users/Desktop',
-      'Intended Audience :: Developers',
-      'License :: OSI Approved :: MIT License',
-      'Operating System :: POSIX',
-      'Programming Language :: Python :: 2.6',
-      'Programming Language :: Python :: 2.7',
-      'Topic :: Games/Entertainment :: Real Time Strategy',
-      'Topic :: Software Development :: Libraries',
-      'Topic :: System :: Archiving',
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
+        'Intended Audience :: End Users/Desktop',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: POSIX',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Games/Entertainment :: Real Time Strategy',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: System :: Archiving',
     ],
-    install_requires=['mpyq'],
+    install_requires=[
+        'mpyq'
+    ],
 )
