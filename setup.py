@@ -25,5 +25,10 @@ setup(
       'Topic :: Software Development :: Libraries',
       'Topic :: System :: Archiving',
     ],
-    install_requires=['mpyq'],
+    entry_points={
+        'console_scripts': [
+            's2protocol = s2protocol.s2protocol:main',
+        ]
+    },
+    install_requires=['mpyq', 'argparse'] if float(sys.version[:3]) < 2.7 else ['mpyq'],
 )
