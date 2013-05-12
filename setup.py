@@ -3,6 +3,14 @@ import sys
 from setuptools import setup
 
 
+install_requires = [
+    'mpyq >= 0.2.2',
+]
+
+if float(sys.version[:3]) < 2.7:
+    install_requires.append('argparse')
+
+
 setup(
     name='s2protocol',
     version='1.0.1-dev',
@@ -30,5 +38,5 @@ setup(
             's2protocol = s2protocol.s2protocol:main',
         ]
     },
-    install_requires=['mpyq', 'argparse'] if float(sys.version[:3]) < 2.7 else ['mpyq'],
+    install_requires=install_requires,
 )
