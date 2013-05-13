@@ -23,6 +23,7 @@ s2protocol supports all StarCraft II replay files that were written with retail 
 
 Some notes on tracker events:
 * Tracker events are new in version 2.0.8, they do not exist in replays recorded with older versions of the game.
+* All coordinates for tracker events are approximate and must be multiplied by 4 to translate to map coordinates.
 * Convert unit tag index, recycle pairs into unit tags (as seen in game events) with protocol.unit_tag(index, recycle)
 * Interpret the NNet.Replay.Tracker.SUnitPositionsEvent events like this:
 
