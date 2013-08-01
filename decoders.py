@@ -258,30 +258,21 @@ class VersionedDecoder:
     def _struct(self, fields):
         self._expect_skip(5)
         result = {}
-        field_index = 0
         length = self._vint()
         for i in xrange(length):
             tag = self._vint()
-            while field_index < len(fields):
-                field = fields[field_index]
-                if tag == field[2]:
-                    if field[0] == '__parent':
-                        parent = self.instance(field[1])
-                        if isinstance(parent, dict):
-                            result.update(parent)
-                        elif len(fields) == 1:
-                            result = parent
-                        else:
-                            result[field[0]] = parent
+            field = next((f for f in fields if f[2] == tag), None)
+            if field:
+                if field[0] == '__parent':
+                    parent = self.instance(field[1])
+                    if isinstance(parent, dict):
+                        result.update(parent)
+                    elif len(fields) == 1:
+                        result = parent
                     else:
-                        result[field[0]] = self.instance(field[1])
-                    field_index += 1
-                    break
-                elif tag < field[2]:
-                    self._skip_instance()
-                    break
+                        result[field[0]] = parent
                 else:
-                    field_index += 1
+                    result[field[0]] = self.instance(field[1])
             else:
                 self._skip_instance()
         return result
