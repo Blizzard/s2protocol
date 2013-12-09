@@ -365,8 +365,25 @@ def decode_replay_initdata(contents):
 
 def decode_replay_attributes_events(contents):
     """Decodes and yields each attribute from the contents byte string."""
-    # Note: not supported in this version
-    return {}
+    buffer = BitPackedBuffer(contents, 'little')
+    attributes = {}
+    if not buffer.done():
+        attributes['source'] = None
+        attributes['mapNamespace'] = buffer.read_bits(32)
+        count = buffer.read_bits(32)
+        attributes['scopes'] = {}
+        while not buffer.done():
+            value = {}
+            value['namespace'] = buffer.read_bits(32)
+            value['attrid'] = attrid = buffer.read_bits(32)
+            scope = buffer.read_bits(8)
+            value['value'] = buffer.read_aligned_bytes(4)[::-1].strip('\x00')
+            if not scope in attributes['scopes']:
+                attributes['scopes'][scope] = {}
+            if not attrid in attributes['scopes'][scope]:
+                attributes['scopes'][scope][attrid] = []
+            attributes['scopes'][scope][attrid].append(value)
+    return attributes
 
 
 def unit_tag(unitTagIndex, unitTagRecycle):
