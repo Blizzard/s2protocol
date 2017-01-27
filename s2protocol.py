@@ -26,7 +26,7 @@ import pprint
 
 from mpyq import mpyq
 import protocol15405
-
+import binascii
 
 class EventLogger:
     def __init__(self):
@@ -90,12 +90,19 @@ if __name__ == '__main__':
     if args.details:
         contents = archive.read_file('replay.details')
         details = protocol.decode_replay_details(contents)
+        if isinstance(details['m_cacheHandles'],list):
+            for (i,item) in enumerate(details['m_cacheHandles']):
+                details['m_cacheHandles'][i] = binascii.b2a_hex(details['m_cacheHandles'][i][8:]).decode('utf8')
         logger.log(sys.stdout, details)
 
     # Print protocol init data
     if args.initdata:
         contents = archive.read_file('replay.initData')
         initdata = protocol.decode_replay_initdata(contents)
+
+        if isinstance(initdata['m_syncLobbyState']['m_gameDescription']['m_cacheHandles'],list):
+            for (i,item) in enumerate(initdata['m_syncLobbyState']['m_gameDescription']['m_cacheHandles']):
+                initdata['m_syncLobbyState']['m_gameDescription']['m_cacheHandles'][i] = binascii.b2a_hex(initdata['m_syncLobbyState']['m_gameDescription']['m_cacheHandles'][i][8:]).decode('utf8')
         logger.log(sys.stdout, initdata['m_syncLobbyState']['m_gameDescription']['m_cacheHandles'])
         logger.log(sys.stdout, initdata)
 
