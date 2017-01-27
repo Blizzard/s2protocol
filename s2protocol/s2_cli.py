@@ -26,6 +26,8 @@ import pprint
 
 import mpyq
 
+import versions
+
 
 class EventLogger:
     def __init__(self):
@@ -73,14 +75,16 @@ def main():
 
     # Read the protocol header, this can be read with any protocol
     contents = archive.header['user_data_header']['content']
-    header = protocol15405.decode_replay_header(contents)
+    header = versions.latest().decode_replay_header(contents)
     if args.header:
         logger.log(sys.stdout, header)
 
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
     try:
-        protocol = __import__('s2protocol.protocol%s' % (baseBuild,), fromlist='s2protocol')
+        #protocol = __import__('s2protocol.versions.protocol%s' % \
+        #(baseBuild,), fromlist='s2protocol')
+        protocol = versions.build(baseBuild)
     except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
