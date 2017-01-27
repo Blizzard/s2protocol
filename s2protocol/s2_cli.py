@@ -25,7 +25,6 @@ import argparse
 import pprint
 
 import mpyq
-from s2protocol import protocol15405
 
 
 class EventLogger:
@@ -47,7 +46,7 @@ class EventLogger:
             print >> output, '"%s", %d, %d,' % (name, stat[0], stat[1] / 8)
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('replay_file', help='.SC2Replay file to load')
     parser.add_argument("--gameevents", help="print game events",
@@ -81,7 +80,7 @@ if __name__ == '__main__':
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
     try:
-        protocol = __import__('protocol%s' % (baseBuild,))
+        protocol = __import__('s2protocol.protocol%s' % (baseBuild,), fromlist='s2protocol')
     except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
@@ -128,3 +127,6 @@ if __name__ == '__main__':
     if args.stats:
         logger.log_stats(sys.stderr)
 
+
+if __name__ == '__main__':
+    main()

@@ -7,4 +7,5 @@ build
 docs/_build
 env
 dist
+build
 *.egg-info
