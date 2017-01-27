@@ -24,6 +24,16 @@ def import_protocol(base_path, module_name):
             fp.close()
 
 
+def list_all(base_path=None):
+    if base_path is None:
+        base_path = os.path.dirname(__file__)
+    pattern = re.compile('.*protocol[0-9]+.py$')
+    files = [ f for f in os.listdir(base_path) \
+        if pattern.match(f) ]
+    files.sort()
+    return files
+
+
 def latest():
     """
     Import the latest protocol version in the versions module (directory)
@@ -33,12 +43,9 @@ def latest():
     """
     # Find matchng protocol version files
     base_path = os.path.dirname(__file__)
-    pattern = re.compile('.*protocol[0-9]+.py')
-    files = [ f for f in os.listdir(base_path) \
-        if pattern.match(f) ]
+    files = list_all(base_path)
 
     # Sort using version number, take latest
-    files.sort()
     latest_version = files[-1]
     
     # Convert file to module name

@@ -23,10 +23,12 @@
 import sys
 import argparse
 import pprint
+import re
 
 import mpyq
 
 import versions
+import diff
 
 
 class EventLogger:
@@ -50,7 +52,8 @@ class EventLogger:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('replay_file', help='.SC2Replay file to load')
+    parser.add_argument('replay_file', help='.SC2Replay file to load',
+                        nargs='?')
     parser.add_argument("--gameevents", help="print game events",
                         action="store_true")
     parser.add_argument("--messageevents", help="print message events",
@@ -67,7 +70,42 @@ def main():
                         action="store_true")
     parser.add_argument("--stats", help="print stats",
                         action="store_true")
+    parser.add_argument("--diff", help="diff two protocols",
+                        default=None,
+                        action="store")
+    parser.add_argument("--versions", help="show all protocol versions",
+                        action="store_true")
     args = parser.parse_args()
+
+    # TODO: clean up the command line arguments to allow cleaner sub-command
+    # style commands
+
+    # List all protocol versions
+    if args.versions:
+        files = versions.list_all()
+        pattern = re.compile('^protocol([0-9]+).py$')
+        captured = []
+        for f in files:
+            captured.append(pattern.match(f).group(1))
+            if len(captured) == 8:
+                print >> sys.stdout, captured[0:8]
+                captured = []
+        print >> sys.stdout, captured
+        return
+
+    # Diff two protocols
+    if args.diff and args.diff is not None:
+        version_list = args.diff.split(',')
+        if len(version_list) < 2:
+            print >> sys.stderr, "--diff requires two versions separated by comma e.g. --diff=1,2"
+            sys.exit(1)
+        diff.diff(version_list[0], version_list[1])
+        return
+
+    # Check/test the replay file
+    if args.replay_file is None:
+        print >> sys.stderr, ".S2Replay file not specified"
+        sys.exit(1)
 
     archive = mpyq.MPQArchive(args.replay_file)
 
@@ -82,8 +120,6 @@ def main():
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
     try:
-        #protocol = __import__('s2protocol.versions.protocol%s' % \
-        #(baseBuild,), fromlist='s2protocol')
         protocol = versions.build(baseBuild)
     except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
