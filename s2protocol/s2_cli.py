@@ -143,6 +143,9 @@ def cache_handle_uri(handle):
 
 
 def process_init_data(initdata):
+    """
+    Take replay init data and convert cache handles to HTTP references.
+    """
     translated_handles = []
     for handle in initdata['m_syncLobbyState']['m_gameDescription']['m_cacheHandles']:
         translated_handles.append(cache_handle_uri(handle))
@@ -151,6 +154,9 @@ def process_init_data(initdata):
 
 
 def main():
+    """
+    Get command line arguments and invoke the command line functionality.
+    """
     filters = []
     parser = argparse.ArgumentParser()
     parser.add_argument('replay_file', help='.SC2Replay file to load',

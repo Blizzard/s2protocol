@@ -5,6 +5,9 @@ import sys
 
 
 def import_protocol(base_path, module_name):
+    """
+    Import a module from a base path, used to import protocol modules.
+    """
 
     # Try to return the module if it's been loaded already
     try:
@@ -25,6 +28,9 @@ def import_protocol(base_path, module_name):
 
 
 def list_all(base_path=None):
+    """
+    Returns a list of the current protocol version file names in the versions module.
+    """
     if base_path is None:
         base_path = os.path.dirname(__file__)
     pattern = re.compile('.*protocol[0-9]+.py$')

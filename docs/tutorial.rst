@@ -44,10 +44,10 @@ Using s2protocol Command Line Tool
 
 If you're just interested in seeing the stats from a given replay file,
 ``s2protocol`` can be used in a standalone manner. A command line utility,
-called ``s2protocol.py`` is installed when the package is installed. Usage
+called ``s2_cli.py`` is installed when the package is installed. Usage
 looks like::
 
-    s2protocol.py ~/Desktop/my_pvp_replay.SC2Replay --stats
+    s2_cli.py ~/Desktop/my_pvp_replay.SC2Replay --stats
 
 This will output the stats from the replay file then exit.
 
@@ -61,6 +61,16 @@ Other options you can pass in include:
 * ``--details``: Prints out the protocol details
 * ``--initdata``: Prints out the protocol initdata
 * ``--stats``: Prints out the stats
+
+To work inspect different protocol versions:
+
+* ``--versions``: Show all protocol versions
+* ``--diff``: Diff two protocol versions
+
+To control the output format:
+
+* ``--json``: Outputs events as JSON structured documents
+* ``--ndjson``: Like --json but is each event is newline delimited
 
 
 Using s2protocol Programmatically
@@ -77,5 +87,5 @@ header looks like::
     >>> contents = archive.header['user_data_header']['content']
 
     # Now parse the header information.
-    >>> from s2protocol import protocol15405
-    >>> header = protocol15405.decode_replay_header(contents)
+    >>> from s2protocol import versions
+    >>> header = versions.latest().decode_replay_header(contents)
