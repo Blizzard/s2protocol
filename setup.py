@@ -42,5 +42,4 @@ setup(
             's2protocol = s2protocol.s2protocol:main',
         ]
     },
-    install_requires=install_requires,
 )
