@@ -3,6 +3,7 @@
 
 *.swp
 *.swo
+*~
 
 *.SC2Replay
 

@@ -1,26 +1,29 @@
+
 import os
 import re
 import imp
 import sys
 
 
-def import_protocol(base_path, module_name):
+def _import_protocol(base_path, protocol_module_name):
     """
     Import a module from a base path, used to import protocol modules.
     """
 
     # Try to return the module if it's been loaded already
     try:
-        return sys.modules[module_name]
+        return sys.modules[protocol_module_name]
     except KeyError:
         pass
 
-    # print 'importing', module_name, 'from', base_path
     # If any of the following calls raises an exception,
     # there's a problem we can't handle -- let the caller handle it.
-    fp, pathname, description = imp.find_module(module_name, [base_path])
+    #
+    # Without the full module name in the load, the 'import decoders' will fail
+    #
+    fp, pathname, description = imp.find_module(protocol_module_name, [base_path])
     try:
-        return imp.load_module(module_name, fp, pathname, description)
+        return imp.load_module('s2protocol.versions.' + protocol_module_name, fp, pathname, description)
     finally:
         # Since we may exit via an exception, close fp explicitly.
         if fp:
@@ -29,7 +32,7 @@ def import_protocol(base_path, module_name):
 
 def list_all(base_path=None):
     """
-    Returns a list of the current protocol version file names in the versions module.
+    Returns a list of the current protocol version file names in the versions module sorted by name.
     """
     if base_path is None:
         base_path = os.path.dirname(__file__)
@@ -58,7 +61,7 @@ def latest():
     module_name = latest_version.split('.')[0]
     
     # Perform the import
-    return import_protocol(base_path, module_name)
+    return _import_protocol(base_path, module_name)
 
 
 
@@ -67,5 +70,5 @@ def build(build_version):
     Get the module for a specific build version
     """
     base_path = os.path.dirname(__file__)
-    return import_protocol(base_path, 'protocol{0}'.format(build_version))
+    return _import_protocol(base_path, 'protocol{0}'.format(build_version))
 
