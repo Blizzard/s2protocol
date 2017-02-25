@@ -1,24 +1,4 @@
 #!/usr/bin/env python
-#
-# Copyright (c) 2013 Blizzard Entertainment
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
 
 import sys
 import argparse
@@ -51,6 +31,7 @@ class JSONOutputFilter(EventFilter):
     def process(self, event):
         print >> self._output, json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True, indent=4)
         return event
+
 
 class NDJSONOutputFilter(EventFilter):
     """ Added as a filter will format the event into NDJSON """
@@ -171,6 +152,8 @@ def main():
                         action="store_true")
     parser.add_argument("--header", help="print protocol header",
                         action="store_true")
+    parser.add_argument("--metadata", help="print game metadata",
+                        action="store_true")
     parser.add_argument("--details", help="print protocol details",
                         action="store_true")
     parser.add_argument("--initdata", help="print protocol initdata",
@@ -249,7 +232,7 @@ def main():
     contents = archive.header['user_data_header']['content']
     header = versions.latest().decode_replay_header(contents)
     if args.header:
-        process_event(args.header)
+        process_event(header)
 
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
@@ -258,6 +241,11 @@ def main():
     except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
+
+    # Process game metadata
+    if args.all or args.metadata:
+        contents = archive.read_file('replay.gamemetadata.json')
+        process_event(json.loads(contents))
 
     # Print protocol details
     if args.all or args.details:
