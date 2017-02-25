@@ -152,6 +152,8 @@ def main():
                         action="store_true")
     parser.add_argument("--header", help="print protocol header",
                         action="store_true")
+    parser.add_argument("--metadata", help="print game metadata",
+                        action="store_true")
     parser.add_argument("--details", help="print protocol details",
                         action="store_true")
     parser.add_argument("--initdata", help="print protocol initdata",
@@ -239,6 +241,11 @@ def main():
     except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
+
+    # Process game metadata
+    if args.all or args.metadata:
+        contents = archive.read_file('replay.gamemetadata.json')
+        process_event(json.loads(contents))
 
     # Print protocol details
     if args.all or args.details:
