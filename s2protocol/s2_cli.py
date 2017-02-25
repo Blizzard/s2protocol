@@ -230,7 +230,7 @@ def main():
     contents = archive.header['user_data_header']['content']
     header = versions.latest().decode_replay_header(contents)
     if args.header:
-        process_event(args.header)
+        process_event(header)
 
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
