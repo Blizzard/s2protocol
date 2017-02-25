@@ -11,6 +11,7 @@ import mpyq
 
 import versions
 import diff
+import attributes as _attr
 
 
 class EventFilter(object):
@@ -134,6 +135,29 @@ def process_init_data(initdata):
     return initdata
 
 
+def process_scope_attributes(all_scopes, event_fn):
+    # Build up the reverse attribute mapping
+    attr_id_to_name = {}
+    for sym in _attr.__dict__:
+        if sym.startswith('_'):
+            continue
+        attr_id_to_name[_attr.__dict__.get(sym)] = sym.lower()
+
+    # Each scope represents a slot in the lobby
+    for scope, scope_dict in all_scopes.iteritems():
+        scope_doc = { 'scope': scope }
+        # Convert all other attributes to symbolic representation
+        for attr_id, val_dict in scope_dict.iteritems():
+            val = val_dict[0]['value'] 
+            attr_name = attr_id_to_name.get(attr_id, None)
+            if attr_name is not None:
+                scope_doc[attr_name] = val
+            else:
+                scope_doc['unknown_{}'.format(attr_id)] = val
+
+        # Pass the scope doc as a new event 
+        event_fn(scope_doc)
+
 def main():
     """
     Get command line arguments and invoke the command line functionality.
@@ -149,6 +173,8 @@ def main():
     parser.add_argument("--trackerevents", help="print tracker events",
                         action="store_true")
     parser.add_argument("--attributeevents", help="print attributes events",
+                        action="store_true")
+    parser.add_argument("--attributeparse", help="parse attributes events",
                         action="store_true")
     parser.add_argument("--header", help="print protocol header",
                         action="store_true")
@@ -277,10 +303,19 @@ def main():
             map(process_event, protocol.decode_replay_tracker_events(contents))
 
     # Print attributes events
-    if args.all or args.attributeevents:
+    if args.all or args.attributeevents or args.attributeparse:
         contents = archive.read_file('replay.attributes.events')
         attributes = protocol.decode_replay_attributes_events(contents)
-        process_event(attributes)
+
+        # Process raw attribute events structure
+        if args.attributeevents:
+            process_event(attributes)
+        
+        # Convert attributes to higher level requested data, will
+        # call prcess_event for each new event that it creates
+        if args.attributeparse:
+            process_scope_attributes(attributes['scopes'], process_event)
+            
         
     for f in filters:
         f.finish()
