@@ -23,15 +23,18 @@
 import sys
 import argparse
 import pprint
+import re
 
-from mpyq import mpyq
-import protocol15405
+import mpyq
+
+import versions
+import diff
 
 
 class EventLogger:
     def __init__(self):
         self._event_stats = {}
-        
+
     def log(self, output, event):
         # update stats
         if '_event' in event and '_bits' in event:
@@ -41,15 +44,16 @@ class EventLogger:
             self._event_stats[event['_event']] = stat
         # write structure
         pprint.pprint(event, stream=output)
-        
+
     def log_stats(self, output):
         for name, stat in sorted(self._event_stats.iteritems(), key=lambda x: x[1][1]):
             print >> output, '"%s", %d, %d,' % (name, stat[0], stat[1] / 8)
-    
 
-if __name__ == '__main__':
+
+def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('replay_file', help='.SC2Replay file to load')
+    parser.add_argument('replay_file', help='.SC2Replay file to load',
+                        nargs='?')
     parser.add_argument("--gameevents", help="print game events",
                         action="store_true")
     parser.add_argument("--messageevents", help="print message events",
@@ -66,26 +70,61 @@ if __name__ == '__main__':
                         action="store_true")
     parser.add_argument("--stats", help="print stats",
                         action="store_true")
+    parser.add_argument("--diff", help="diff two protocols",
+                        default=None,
+                        action="store")
+    parser.add_argument("--versions", help="show all protocol versions",
+                        action="store_true")
     args = parser.parse_args()
 
+    # TODO: clean up the command line arguments to allow cleaner sub-command
+    # style commands
+
+    # List all protocol versions
+    if args.versions:
+        files = versions.list_all()
+        pattern = re.compile('^protocol([0-9]+).py$')
+        captured = []
+        for f in files:
+            captured.append(pattern.match(f).group(1))
+            if len(captured) == 8:
+                print >> sys.stdout, captured[0:8]
+                captured = []
+        print >> sys.stdout, captured
+        return
+
+    # Diff two protocols
+    if args.diff and args.diff is not None:
+        version_list = args.diff.split(',')
+        if len(version_list) < 2:
+            print >> sys.stderr, "--diff requires two versions separated by comma e.g. --diff=1,2"
+            sys.exit(1)
+        diff.diff(version_list[0], version_list[1])
+        return
+
+    # Check/test the replay file
+    if args.replay_file is None:
+        print >> sys.stderr, ".S2Replay file not specified"
+        sys.exit(1)
+
     archive = mpyq.MPQArchive(args.replay_file)
-    
+
     logger = EventLogger()
 
     # Read the protocol header, this can be read with any protocol
     contents = archive.header['user_data_header']['content']
-    header = protocol15405.decode_replay_header(contents)
+    header = versions.latest().decode_replay_header(contents)
     if args.header:
         logger.log(sys.stdout, header)
 
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
     try:
-        protocol = __import__('protocol%s' % (baseBuild,))
+        protocol = versions.build(baseBuild)
     except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
-        
+
     # Print protocol details
     if args.details:
         contents = archive.read_file('replay.details')
@@ -123,8 +162,11 @@ if __name__ == '__main__':
         contents = archive.read_file('replay.attributes.events')
         attributes = protocol.decode_replay_attributes_events(contents)
         logger.log(sys.stdout, attributes)
-        
+
     # Print stats
     if args.stats:
         logger.log_stats(sys.stderr)
 
+
+if __name__ == '__main__':
+    main()
