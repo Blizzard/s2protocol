@@ -24,14 +24,15 @@ import sys
 import argparse
 import pprint
 
-from mpyq import mpyq
-import protocol15405
+import mpyq
+
+import versions
 
 
 class EventLogger:
     def __init__(self):
         self._event_stats = {}
-        
+
     def log(self, output, event):
         # update stats
         if '_event' in event and '_bits' in event:
@@ -41,13 +42,13 @@ class EventLogger:
             self._event_stats[event['_event']] = stat
         # write structure
         pprint.pprint(event, stream=output)
-        
+
     def log_stats(self, output):
         for name, stat in sorted(self._event_stats.iteritems(), key=lambda x: x[1][1]):
             print >> output, '"%s", %d, %d,' % (name, stat[0], stat[1] / 8)
-    
 
-if __name__ == '__main__':
+
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('replay_file', help='.SC2Replay file to load')
     parser.add_argument("--gameevents", help="print game events",
@@ -69,23 +70,25 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     archive = mpyq.MPQArchive(args.replay_file)
-    
+
     logger = EventLogger()
 
     # Read the protocol header, this can be read with any protocol
     contents = archive.header['user_data_header']['content']
-    header = protocol15405.decode_replay_header(contents)
+    header = versions.latest().decode_replay_header(contents)
     if args.header:
         logger.log(sys.stdout, header)
 
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
     try:
-        protocol = __import__('protocol%s' % (baseBuild,))
+        #protocol = __import__('s2protocol.versions.protocol%s' % \
+        #(baseBuild,), fromlist='s2protocol')
+        protocol = versions.build(baseBuild)
     except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
-        
+
     # Print protocol details
     if args.details:
         contents = archive.read_file('replay.details')
@@ -123,8 +126,11 @@ if __name__ == '__main__':
         contents = archive.read_file('replay.attributes.events')
         attributes = protocol.decode_replay_attributes_events(contents)
         logger.log(sys.stdout, attributes)
-        
+
     # Print stats
     if args.stats:
         logger.log_stats(sys.stderr)
 
+
+if __name__ == '__main__':
+    main()
