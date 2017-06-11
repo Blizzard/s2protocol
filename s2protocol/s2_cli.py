@@ -264,8 +264,8 @@ def main():
     baseBuild = header['m_version']['m_baseBuild']
     try:
         protocol = versions.build(baseBuild)
-    except:
-        print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
+    except Exception, e:
+        print >> sys.stderr, 'Unsupported base build: {0} ({1})'.format(baseBuild, str(e))
         sys.exit(1)
 
     # Process game metadata
