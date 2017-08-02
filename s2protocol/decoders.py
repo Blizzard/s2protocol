@@ -96,6 +96,7 @@ class BitPackedDecoder:
         if typeid >= len(self._typeinfos):
             raise CorruptedError(self)
         typeinfo = self._typeinfos[typeid]
+        #print ' -- instance ', typeid, typeinfo
         return getattr(self, typeinfo[0])(*typeinfo[1])
 
     def byte_align(self):
