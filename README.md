@@ -1,5 +1,7 @@
 # S2 Protocol
 
+[![Documentation Status](https://readthedocs.org/projects/s2protocol/badge/?version=latest)](http://s2protocol.readthedocs.io/en/latest/?badge=latest)
+
 s2protocol is a reference Python library and standalone tool to decode StarCraft II replay files into Python data structures.
 
 Currently s2protocol can decode these structures and events:
@@ -49,7 +51,7 @@ Open sourced under the MIT license. See the included LICENSE file for more infor
 
 # Acknowledgements
 
-The standalone tool uses [mpyq](https://github.com/arkx/mpyq/) to read mopaq files.
+The standalone tool uses [mpyq](https://github.com/eagleflo/mpyq/) to read mopaq files.
 
 Thanks to David Joerg and Graylin Kim of [GGTracker](http://www.ggtracker.com) for design feedback and beta-testing.
 

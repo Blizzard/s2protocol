@@ -1,4 +1,15 @@
 *.DS_Store
 *.pyc
 
+*.swp
+*.swo
+*~
+
 *.SC2Replay
+
+build
+docs/_build
+env
+dist
+build
+*.egg-info
