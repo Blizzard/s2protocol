@@ -13,8 +13,9 @@ if float(sys.version[:3]) < 2.7:
 
 setup(
     name='s2protocol',
-    version='1.0.1-dev',
+    version='1.0.1.dev0',
     author='Blizzard Entertainment',
+    author_email='s2github@blizzard.com',
     url='https://github.com/Blizzard/s2protocol',
     description='Python library to decode StarCraft II replay protocols',
     packages=[
