@@ -158,6 +158,15 @@ def process_scope_attributes(all_scopes, event_fn):
         # Pass the scope doc as a new event 
         event_fn(scope_doc)
 
+
+def read_contents(archive, content):
+    contents = archive.read_file(content)
+    if not contents:
+        print('Error: Archive missing {}'.format(content))
+        sys.exit(1)
+    return contents
+
+
 def main():
     """
     Get command line arguments and invoke the command line functionality.
@@ -270,41 +279,41 @@ def main():
 
     # Process game metadata
     if args.all or args.metadata:
-        contents = archive.read_file('replay.gamemetadata.json')
+        contents = read_contents(archive, 'replay.gamemetadata.json')
         process_event(json.loads(contents))
 
     # Print protocol details
     if args.all or args.details:
-        contents = archive.read_file('replay.details')
+        contents = read_contents(archive, 'replay.details')
         details = protocol.decode_replay_details(contents)
         process_event(details)
 
     # Print protocol init data
     if args.all or args.initdata:
-        contents = archive.read_file('replay.initData')
+        contents = read_contents(archive, 'replay.initData')
         initdata = protocol.decode_replay_initdata(contents)
         initdata = process_init_data(initdata)
         process_event(initdata)
 
     # Print game events and/or game events stats
     if args.all or args.gameevents:
-        contents = archive.read_file('replay.game.events')
+        contents = read_contents(archive, 'replay.game.events')
         map(process_event, protocol.decode_replay_game_events(contents))
 
     # Print message events
     if args.all or args.messageevents:
-        contents = archive.read_file('replay.message.events')
+        contents = read_contents(archive, 'replay.message.events')
         map(process_event, protocol.decode_replay_message_events(contents))
 
     # Print tracker events
     if args.all or args.trackerevents:
         if hasattr(protocol, 'decode_replay_tracker_events'):
-            contents = archive.read_file('replay.tracker.events')
+            contents = read_contents(archive, 'replay.tracker.events')
             map(process_event, protocol.decode_replay_tracker_events(contents))
 
     # Print attributes events
     if args.all or args.attributeevents or args.attributeparse:
-        contents = archive.read_file('replay.attributes.events')
+        contents = read_contents(archive, 'replay.attributes.events')
         attributes = protocol.decode_replay_attributes_events(contents)
 
         # Process raw attribute events structure
