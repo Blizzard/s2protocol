@@ -13,7 +13,7 @@ if float(sys.version[:3]) < 2.7:
 
 setup(
     name='s2protocol',
-    version='3.18.0.57507.0',
+    version='3.19.0.58400.0',
     author='Blizzard Entertainment',
     author_email='s2github@blizzard.com',
     url='https://github.com/Blizzard/s2protocol',
