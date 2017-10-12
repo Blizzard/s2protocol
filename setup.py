@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 from setuptools import setup
-
+import gameversion_autogen as ver
 
 install_requires = [
     'mpyq >= 0.2.2',
@@ -13,7 +13,7 @@ if float(sys.version[:3]) < 2.7:
 
 setup(
     name='s2protocol',
-    version='3.19.0.58400.0',
+    version=ver.game_version(),
     author='Blizzard Entertainment',
     author_email='s2github@blizzard.com',
     url='https://github.com/Blizzard/s2protocol',
