@@ -191,6 +191,8 @@ def main():
                         action="store_true")
     parser.add_argument("--details", help="print protocol details",
                         action="store_true")
+    parser.add_argument("--details_backup", help="print protocol anoynmized details",
+                        action="store_true")
     parser.add_argument("--initdata", help="print protocol initdata",
                         action="store_true")
     parser.add_argument("--all", help="print all data",
@@ -287,6 +289,12 @@ def main():
         contents = read_contents(archive, 'replay.details')
         details = protocol.decode_replay_details(contents)
         process_event(details)
+
+    # Print protocol details
+    if args.all or args.details_backup:
+        contents = read_contents(archive, 'replay.details.backup')
+        details_backup = protocol.decode_replay_details(contents)
+        process_event(details_backup)
 
     # Print protocol init data
     if args.all or args.initdata:
