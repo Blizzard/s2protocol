@@ -124,6 +124,17 @@ def cache_handle_uri(handle):
     return uri
 
 
+def process_details_data(details):
+    """
+    Take details and convert cache handles to HTTP references.
+    """
+    translated_handles = []
+    for handle in details['m_cacheHandles']:
+        translated_handles.append(cache_handle_uri(handle))
+    details['m_cacheHandles'] = translated_handles
+    return details
+
+
 def process_init_data(initdata):
     """
     Take replay init data and convert cache handles to HTTP references.
@@ -190,6 +201,8 @@ def main():
     parser.add_argument("--metadata", help="print game metadata",
                         action="store_true")
     parser.add_argument("--details", help="print protocol details",
+                        action="store_true")
+    parser.add_argument("--details_backup", help="print protocol anoynmized details",
                         action="store_true")
     parser.add_argument("--initdata", help="print protocol initdata",
                         action="store_true")
@@ -286,7 +299,15 @@ def main():
     if args.all or args.details:
         contents = read_contents(archive, 'replay.details')
         details = protocol.decode_replay_details(contents)
+        details = process_details_data(details)
         process_event(details)
+
+    # Print protocol details
+    if args.all or args.details_backup:
+        contents = read_contents(archive, 'replay.details.backup')
+        details_backup = protocol.decode_replay_details(contents)
+        details_backup = process_details_data(details_backup)
+        process_event(details_backup)
 
     # Print protocol init data
     if args.all or args.initdata:
