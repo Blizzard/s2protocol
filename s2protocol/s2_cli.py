@@ -13,6 +13,10 @@ import versions
 import diff
 import attributes as _attr
 
+import cProfile
+import pstats
+import StringIO
+
 
 class EventFilter(object):
     def process(self, event):
@@ -223,7 +227,13 @@ def main():
                         action="store_true")
     parser.add_argument("--ndjson", help="print output as ndjson (newline delimited)",
                         action="store_true")
+    parser.add_argument("--profile", help="Whether to profile or not",
+                        action="store_true")
     args = parser.parse_args()
+
+    if args.profile:
+        pr = cProfile.Profile()
+        pr.enable()
 
     # TODO: clean up the command line arguments to allow cleaner sub-command
     # style commands
@@ -349,6 +359,16 @@ def main():
         
     for f in filters:
         f.finish()
+
+    if args.profile:
+        pr.disable()
+        print "Profiler Results"
+        print "----------------"
+        s = StringIO.StringIO()
+        sortby = 'cumulative'
+        ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        ps.print_stats()
+        print s.getvalue()
 
 if __name__ == '__main__':
     main()
