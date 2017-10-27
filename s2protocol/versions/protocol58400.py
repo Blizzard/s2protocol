@@ -18,7 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from decoders import *
+from s2protocol.decoders import *
+
 
 
 # Decoding instructions for each protocol type.
@@ -363,8 +364,12 @@ tracker_event_types = {
     9: (206, 'NNet.Replay.Tracker.SPlayerSetupEvent'),
 }
 
+# NOTE: older builds may not support some types and the generated methods
+# may fail to function properly, if specific backwards compatibility is 
+# needed these values should be tested against for None
+
 # The typeid of the NNet.Replay.Tracker.EEventId enum.
-tracker_eventid_typeid = 2
+tracker_eventid_typeid = 2 
 
 # The typeid of NNet.SVarUint32 (the type used to encode gameloop deltas).
 svaruint32_typeid = 7

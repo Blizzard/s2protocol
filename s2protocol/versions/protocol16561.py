@@ -1,4 +1,4 @@
-# Copyright (c) 2013 Blizzard Entertainment
+# Copyright (c) 2015-2017 Blizzard Entertainment
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,7 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from decoders import *
+from s2protocol.decoders import *
+
 
 
 # Decoding instructions for each protocol type.
@@ -30,217 +31,216 @@ typeinfos = [
     ('_int',[(0,22)]),  #4
     ('_int',[(0,32)]),  #5
     ('_choice',[(0,2),{0:('m_uint6',2),1:('m_uint14',3),2:('m_uint22',4),3:('m_uint32',5)}]),  #6
-    ('_int',[(0,5)]),  #7
-    ('_struct',[[('m_playerId',7,-1)]]),  #8
-    ('_blob',[(0,8)]),  #9
-    ('_int',[(0,8)]),  #10
-    ('_struct',[[('m_flags',10,0),('m_major',10,1),('m_minor',10,2),('m_revision',10,3),('m_build',5,4),('m_baseBuild',5,5)]]),  #11
-    ('_int',[(0,3)]),  #12
-    ('_struct',[[('m_signature',9,0),('m_version',11,1),('m_type',12,2),('m_elapsedGameLoops',5,3)]]),  #13
-    ('_fourcc',[]),  #14
-    ('_blob',[(0,7)]),  #15
-    ('_int',[(0,64)]),  #16
-    ('_struct',[[('m_region',10,0),('m_programId',14,1),('m_realm',5,2),('m_name',15,3),('m_id',16,4)]]),  #17
-    ('_struct',[[('m_a',10,0),('m_r',10,1),('m_g',10,2),('m_b',10,3)]]),  #18
-    ('_int',[(0,2)]),  #19
-    ('_struct',[[('m_name',9,0),('m_toon',17,1),('m_race',9,2),('m_color',18,3),('m_control',10,4),('m_teamId',1,5),('m_handicap',0,6),('m_observe',19,7),('m_result',19,8)]]),  #20
-    ('_array',[(0,5),20]),  #21
-    ('_optional',[21]),  #22
-    ('_blob',[(0,10)]),  #23
-    ('_blob',[(0,11)]),  #24
-    ('_struct',[[('m_file',24,0)]]),  #25
-    ('_bool',[]),  #26
-    ('_int',[(-9223372036854775808,64)]),  #27
-    ('_blob',[(0,12)]),  #28
-    ('_blob',[(40,0)]),  #29
-    ('_array',[(0,4),29]),  #30
-    ('_optional',[30]),  #31
-    ('_struct',[[('m_playerList',22,0),('m_title',23,1),('m_difficulty',9,2),('m_thumbnail',25,3),('m_isBlizzardMap',26,4),('m_timeUTC',27,5),('m_timeLocalOffset',27,6),('m_description',28,7),('m_imageFilePath',24,8),('m_mapFileName',24,9),('m_cacheHandles',31,10),('m_miniSave',26,11),('m_gameSpeed',12,12),('m_defaultDifficulty',2,13)]]),  #32
-    ('_optional',[10]),  #33
-    ('_struct',[[('m_race',33,-1)]]),  #34
-    ('_struct',[[('m_team',33,-1)]]),  #35
-    ('_struct',[[('m_name',9,-7),('m_randomSeed',5,-6),('m_racePreference',34,-5),('m_teamPreference',35,-4),('m_testMap',26,-3),('m_testAuto',26,-2),('m_observe',19,-1)]]),  #36
-    ('_array',[(0,5),36]),  #37
-    ('_struct',[[('m_lockTeams',26,-11),('m_teamsTogether',26,-10),('m_advancedSharedControl',26,-9),('m_randomRaces',26,-8),('m_battleNet',26,-7),('m_amm',26,-6),('m_ranked',26,-5),('m_noVictoryOrDefeat',26,-4),('m_fog',19,-3),('m_observers',19,-2),('m_userDifficulty',19,-1)]]),  #38
-    ('_int',[(1,4)]),  #39
-    ('_int',[(1,5)]),  #40
-    ('_int',[(1,8)]),  #41
-    ('_bitarray',[(0,6)]),  #42
-    ('_bitarray',[(0,8)]),  #43
-    ('_bitarray',[(0,2)]),  #44
-    ('_struct',[[('m_allowedColors',42,-5),('m_allowedRaces',43,-4),('m_allowedDifficulty',42,-3),('m_allowedControls',43,-2),('m_allowedObserveTypes',44,-1)]]),  #45
-    ('_array',[(0,5),45]),  #46
-    ('_struct',[[('m_randomValue',5,-23),('m_gameCacheName',23,-22),('m_gameOptions',38,-21),('m_gameSpeed',12,-20),('m_gameType',12,-19),('m_maxUsers',7,-18),('m_maxObservers',7,-17),('m_maxPlayers',7,-16),('m_maxTeams',39,-15),('m_maxColors',40,-14),('m_maxRaces',41,-13),('m_maxControls',41,-12),('m_mapSizeX',10,-11),('m_mapSizeY',10,-10),('m_mapFileSyncChecksum',5,-9),('m_mapFileName',24,-8),('m_mapAuthorName',9,-7),('m_modFileSyncChecksum',5,-6),('m_slotDescriptions',46,-5),('m_defaultDifficulty',2,-4),('m_cacheHandles',30,-3),('m_isBlizzardMap',26,-2),('m_isPremadeFFA',26,-1)]]),  #47
-    ('_optional',[1]),  #48
-    ('_optional',[7]),  #49
-    ('_struct',[[('m_color',49,-1)]]),  #50
-    ('_array',[(0,5),5]),  #51
-    ('_struct',[[('m_control',10,-9),('m_userId',48,-8),('m_teamId',1,-7),('m_colorPref',50,-6),('m_racePref',34,-5),('m_difficulty',2,-4),('m_handicap',0,-3),('m_observe',19,-2),('m_rewards',51,-1)]]),  #52
-    ('_array',[(0,5),52]),  #53
-    ('_struct',[[('m_phase',12,-9),('m_maxUsers',7,-8),('m_maxObservers',7,-7),('m_slots',53,-6),('m_randomSeed',5,-5),('m_hostUserId',48,-4),('m_isSinglePlayer',26,-3),('m_gameDuration',5,-2),('m_defaultDifficulty',2,-1)]]),  #54
-    ('_struct',[[('m_userInitialData',37,-3),('m_gameDescription',47,-2),('m_lobbyState',54,-1)]]),  #55
-    ('_struct',[[('m_syncLobbyState',55,-1)]]),  #56
-    ('_struct',[[('m_name',15,-1)]]),  #57
-    ('_blob',[(0,6)]),  #58
-    ('_struct',[[('m_name',58,-1)]]),  #59
-    ('_struct',[[('m_name',58,-3),('m_type',5,-2),('m_data',15,-1)]]),  #60
-    ('_struct',[[('m_type',5,-3),('m_name',58,-2),('m_data',28,-1)]]),  #61
-    ('_struct',[[('m_developmentCheatsEnabled',26,-4),('m_multiplayerCheatsEnabled',26,-3),('m_syncChecksummingEnabled',26,-2),('m_isMapToMapTransition',26,-1)]]),  #62
-    ('_struct',[[]]),  #63
-    ('_struct',[[('m_fileName',24,-5),('m_automatic',26,-4),('m_overwrite',26,-3),('m_name',9,-2),('m_description',23,-1)]]),  #64
-    ('_int',[(-2147483648,32)]),  #65
-    ('_struct',[[('x',65,-2),('y',65,-1)]]),  #66
-    ('_struct',[[('m_point',66,-4),('m_time',65,-3),('m_verb',23,-2),('m_arguments',23,-1)]]),  #67
-    ('_struct',[[('m_data',67,-1)]]),  #68
-    ('_int',[(0,17)]),  #69
-    ('_int',[(0,16)]),  #70
-    ('_struct',[[('m_abilLink',70,-3),('m_abilCmdIndex',7,-2),('m_abilCmdData',33,-1)]]),  #71
-    ('_optional',[71]),  #72
-    ('_null',[]),  #73
-    ('_int',[(0,20)]),  #74
-    ('_struct',[[('x',74,-3),('y',74,-2),('z',65,-1)]]),  #75
-    ('_struct',[[('m_targetUnitFlags',10,-6),('m_timer',10,-5),('m_tag',5,-4),('m_snapshotUnitLink',70,-3),('m_snapshotPlayerId',48,-2),('m_snapshotPoint',75,-1)]]),  #76
-    ('_choice',[(0,2),{0:('None',73),1:('TargetPoint',75),2:('TargetUnit',76),3:('Data',5)}]),  #77
-    ('_optional',[5]),  #78
-    ('_struct',[[('m_cmdFlags',69,-4),('m_abil',72,-3),('m_data',77,-2),('m_otherUnit',78,-1)]]),  #79
-    ('_array',[(0,8),10]),  #80
-    ('_choice',[(0,2),{0:('None',73),1:('Mask',43),2:('OneIndices',80),3:('ZeroIndices',80)}]),  #81
-    ('_struct',[[('m_unitLink',70,-3),('m_intraSubgroupPriority',10,-2),('m_count',10,-1)]]),  #82
-    ('_array',[(0,8),82]),  #83
-    ('_array',[(0,8),5]),  #84
-    ('_struct',[[('m_subgroupIndex',10,-4),('m_removeMask',81,-3),('m_addSubgroups',83,-2),('m_addUnitTags',84,-1)]]),  #85
-    ('_struct',[[('m_controlGroupId',1,-2),('m_delta',85,-1)]]),  #86
-    ('_struct',[[('m_controlGroupIndex',1,-3),('m_controlGroupUpdate',19,-2),('m_mask',81,-1)]]),  #87
-    ('_struct',[[('m_count',10,-6),('m_subgroupCount',10,-5),('m_activeSubgroupIndex',10,-4),('m_unitTagsChecksum',5,-3),('m_subgroupIndicesChecksum',5,-2),('m_subgroupsChecksum',5,-1)]]),  #88
-    ('_struct',[[('m_controlGroupId',1,-2),('m_selectionSyncData',88,-1)]]),  #89
-    ('_array',[(0,3),65]),  #90
-    ('_struct',[[('m_recipientId',1,-2),('m_resources',90,-1)]]),  #91
-    ('_struct',[[('m_chatMessage',23,-1)]]),  #92
-    ('_int',[(-128,8)]),  #93
-    ('_struct',[[('x',65,-3),('y',65,-2),('z',65,-1)]]),  #94
-    ('_struct',[[('m_beacon',93,-7),('m_ally',93,-6),('m_autocast',93,-5),('m_targetUnitTag',5,-4),('m_targetUnitSnapshotUnitLink',70,-3),('m_targetUnitSnapshotPlayerId',48,-2),('m_targetPoint',94,-1)]]),  #95
-    ('_struct',[[('m_speed',12,-1)]]),  #96
-    ('_struct',[[('m_delta',93,-1)]]),  #97
-    ('_struct',[[('m_verb',23,-2),('m_arguments',23,-1)]]),  #98
-    ('_struct',[[('m_alliance',5,-2),('m_control',5,-1)]]),  #99
-    ('_struct',[[('m_unitTag',5,-1)]]),  #100
-    ('_struct',[[('m_unitTag',5,-2),('m_flags',10,-1)]]),  #101
-    ('_struct',[[('m_conversationId',65,-2),('m_replyId',65,-1)]]),  #102
-    ('_struct',[[('m_purchaseItemId',65,-1)]]),  #103
-    ('_struct',[[('m_difficultyLevel',65,-1)]]),  #104
-    ('_choice',[(0,3),{0:('None',73),1:('Checked',26),2:('ValueChanged',5),3:('SelectionChanged',65),4:('TextChanged',24)}]),  #105
-    ('_struct',[[('m_controlId',65,-3),('m_eventType',65,-2),('m_eventData',105,-1)]]),  #106
-    ('_struct',[[('m_soundHash',5,-2),('m_length',5,-1)]]),  #107
-    ('_struct',[[('m_soundHash',84,-2),('m_length',84,-1)]]),  #108
-    ('_struct',[[('m_syncInfo',108,-1)]]),  #109
-    ('_struct',[[('m_sound',5,-1)]]),  #110
-    ('_struct',[[('m_transmissionId',65,-1)]]),  #111
-    ('_struct',[[('x',70,-2),('y',70,-1)]]),  #112
-    ('_optional',[70]),  #113
-    ('_struct',[[('m_target',112,-4),('m_distance',113,-3),('m_pitch',113,-2),('m_yaw',113,-1)]]),  #114
-    ('_int',[(0,1)]),  #115
-    ('_struct',[[('m_skipType',115,-1)]]),  #116
-    ('_struct',[[('m_button',5,-7),('m_down',26,-6),('m_posXUI',5,-5),('m_posYUI',5,-4),('m_posXWorld',65,-3),('m_posYWorld',65,-2),('m_posZWorld',65,-1)]]),  #117
-    ('_struct',[[('m_soundtrack',5,-1)]]),  #118
-    ('_struct',[[('m_planetId',65,-1)]]),  #119
-    ('_struct',[[('m_key',93,-2),('m_flags',93,-1)]]),  #120
-    ('_struct',[[('m_resources',90,-1)]]),  #121
-    ('_struct',[[('m_fulfillRequestId',65,-1)]]),  #122
-    ('_struct',[[('m_cancelRequestId',65,-1)]]),  #123
-    ('_struct',[[('m_researchItemId',65,-1)]]),  #124
-    ('_struct',[[('m_laggingPlayerId',1,-1)]]),  #125
-    ('_struct',[[('m_mercenaryId',65,-1)]]),  #126
-    ('_struct',[[('m_battleReportId',65,-2),('m_difficultyLevel',65,-1)]]),  #127
-    ('_struct',[[('m_battleReportId',65,-1)]]),  #128
-    ('_int',[(0,19)]),  #129
-    ('_struct',[[('m_decrementMs',129,-1)]]),  #130
-    ('_struct',[[('m_portraitId',65,-1)]]),  #131
-    ('_struct',[[('m_functionName',15,-1)]]),  #132
-    ('_struct',[[('m_result',65,-1)]]),  #133
-    ('_struct',[[('m_gameMenuItemIndex',65,-1)]]),  #134
-    ('_struct',[[('m_reason',93,-1)]]),  #135
-    ('_struct',[[('m_purchaseCategoryId',65,-1)]]),  #136
-    ('_struct',[[('m_button',70,-1)]]),  #137
-    ('_struct',[[('m_recipient',19,-2),('m_string',24,-1)]]),  #138
-    ('_struct',[[('m_recipient',19,-2),('m_point',66,-1)]]),  #139
-    ('_struct',[[('m_progress',65,-1)]]),  #140
+    ('_blob',[(0,8)]),  #7
+    ('_int',[(0,8)]),  #8
+    ('_struct',[[('m_flags',8,0),('m_major',8,1),('m_minor',8,2),('m_revision',8,3),('m_build',5,4),('m_baseBuild',5,5)]]),  #9
+    ('_int',[(0,3)]),  #10
+    ('_struct',[[('m_signature',7,0),('m_version',9,1),('m_type',10,2),('m_elapsedGameLoops',5,3)]]),  #11
+    ('_fourcc',[]),  #12
+    ('_blob',[(0,7)]),  #13
+    ('_int',[(0,64)]),  #14
+    ('_struct',[[('m_region',8,0),('m_programId',12,1),('m_realm',5,2),('m_name',13,3),('m_id',14,4)]]),  #15
+    ('_struct',[[('m_a',8,0),('m_r',8,1),('m_g',8,2),('m_b',8,3)]]),  #16
+    ('_int',[(0,2)]),  #17
+    ('_struct',[[('m_name',7,0),('m_toon',15,1),('m_race',7,2),('m_color',16,3),('m_control',8,4),('m_teamId',1,5),('m_handicap',0,6),('m_observe',17,7),('m_result',17,8)]]),  #18
+    ('_array',[(0,5),18]),  #19
+    ('_optional',[19]),  #20
+    ('_blob',[(0,10)]),  #21
+    ('_blob',[(0,11)]),  #22
+    ('_struct',[[('m_file',22,0)]]),  #23
+    ('_bool',[]),  #24
+    ('_int',[(-9223372036854775808,64)]),  #25
+    ('_blob',[(0,12)]),  #26
+    ('_blob',[(40,0)]),  #27
+    ('_array',[(0,4),27]),  #28
+    ('_optional',[28]),  #29
+    ('_struct',[[('m_playerList',20,0),('m_title',21,1),('m_difficulty',7,2),('m_thumbnail',23,3),('m_isBlizzardMap',24,4),('m_timeUTC',25,5),('m_timeLocalOffset',25,6),('m_description',26,7),('m_imageFilePath',22,8),('m_mapFileName',22,9),('m_cacheHandles',29,10),('m_miniSave',24,11),('m_gameSpeed',10,12),('m_defaultDifficulty',2,13)]]),  #30
+    ('_optional',[8]),  #31
+    ('_struct',[[('m_race',31,-1)]]),  #32
+    ('_struct',[[('m_team',31,-1)]]),  #33
+    ('_struct',[[('m_name',7,-7),('m_randomSeed',5,-6),('m_racePreference',32,-5),('m_teamPreference',33,-4),('m_testMap',24,-3),('m_testAuto',24,-2),('m_observe',17,-1)]]),  #34
+    ('_array',[(0,5),34]),  #35
+    ('_struct',[[('m_lockTeams',24,-11),('m_teamsTogether',24,-10),('m_advancedSharedControl',24,-9),('m_randomRaces',24,-8),('m_battleNet',24,-7),('m_amm',24,-6),('m_ranked',24,-5),('m_noVictoryOrDefeat',24,-4),('m_fog',17,-3),('m_observers',17,-2),('m_userDifficulty',17,-1)]]),  #36
+    ('_int',[(0,5)]),  #37
+    ('_int',[(1,4)]),  #38
+    ('_int',[(1,5)]),  #39
+    ('_int',[(1,8)]),  #40
+    ('_bitarray',[(0,6)]),  #41
+    ('_bitarray',[(0,8)]),  #42
+    ('_bitarray',[(0,2)]),  #43
+    ('_struct',[[('m_allowedColors',41,-5),('m_allowedRaces',42,-4),('m_allowedDifficulty',41,-3),('m_allowedControls',42,-2),('m_allowedObserveTypes',43,-1)]]),  #44
+    ('_array',[(0,5),44]),  #45
+    ('_struct',[[('m_randomValue',5,-23),('m_gameCacheName',21,-22),('m_gameOptions',36,-21),('m_gameSpeed',10,-20),('m_gameType',10,-19),('m_maxUsers',37,-18),('m_maxObservers',37,-17),('m_maxPlayers',37,-16),('m_maxTeams',38,-15),('m_maxColors',39,-14),('m_maxRaces',40,-13),('m_maxControls',40,-12),('m_mapSizeX',8,-11),('m_mapSizeY',8,-10),('m_mapFileSyncChecksum',5,-9),('m_mapFileName',22,-8),('m_mapAuthorName',7,-7),('m_modFileSyncChecksum',5,-6),('m_slotDescriptions',45,-5),('m_defaultDifficulty',2,-4),('m_cacheHandles',28,-3),('m_isBlizzardMap',24,-2),('m_isPremadeFFA',24,-1)]]),  #46
+    ('_optional',[1]),  #47
+    ('_optional',[37]),  #48
+    ('_struct',[[('m_color',48,-1)]]),  #49
+    ('_array',[(0,5),5]),  #50
+    ('_struct',[[('m_control',8,-9),('m_userId',47,-8),('m_teamId',1,-7),('m_colorPref',49,-6),('m_racePref',32,-5),('m_difficulty',2,-4),('m_handicap',0,-3),('m_observe',17,-2),('m_rewards',50,-1)]]),  #51
+    ('_array',[(0,5),51]),  #52
+    ('_struct',[[('m_phase',10,-9),('m_maxUsers',37,-8),('m_maxObservers',37,-7),('m_slots',52,-6),('m_randomSeed',5,-5),('m_hostUserId',47,-4),('m_isSinglePlayer',24,-3),('m_gameDuration',5,-2),('m_defaultDifficulty',2,-1)]]),  #53
+    ('_struct',[[('m_userInitialData',35,-3),('m_gameDescription',46,-2),('m_lobbyState',53,-1)]]),  #54
+    ('_struct',[[('m_syncLobbyState',54,-1)]]),  #55
+    ('_struct',[[('m_name',13,-5)]]),  #56
+    ('_blob',[(0,6)]),  #57
+    ('_struct',[[('m_name',57,-5)]]),  #58
+    ('_struct',[[('m_name',57,-7),('m_type',5,-6),('m_data',13,-5)]]),  #59
+    ('_struct',[[('m_type',5,-7),('m_name',57,-6),('m_data',26,-5)]]),  #60
+    ('_struct',[[('m_developmentCheatsEnabled',24,-8),('m_multiplayerCheatsEnabled',24,-7),('m_syncChecksummingEnabled',24,-6),('m_isMapToMapTransition',24,-5)]]),  #61
+    ('_struct',[[]]),  #62
+    ('_struct',[[('m_fileName',22,-9),('m_automatic',24,-8),('m_overwrite',24,-7),('m_name',7,-6),('m_description',21,-5)]]),  #63
+    ('_int',[(-2147483648,32)]),  #64
+    ('_struct',[[('x',64,-2),('y',64,-1)]]),  #65
+    ('_struct',[[('m_point',65,-4),('m_time',64,-3),('m_verb',21,-2),('m_arguments',21,-1)]]),  #66
+    ('_struct',[[('m_data',66,-5)]]),  #67
+    ('_int',[(0,17)]),  #68
+    ('_int',[(0,16)]),  #69
+    ('_struct',[[('m_abilLink',69,-3),('m_abilCmdIndex',37,-2),('m_abilCmdData',31,-1)]]),  #70
+    ('_optional',[70]),  #71
+    ('_null',[]),  #72
+    ('_int',[(0,20)]),  #73
+    ('_struct',[[('x',73,-3),('y',73,-2),('z',64,-1)]]),  #74
+    ('_struct',[[('m_targetUnitFlags',8,-6),('m_timer',8,-5),('m_tag',5,-4),('m_snapshotUnitLink',69,-3),('m_snapshotPlayerId',47,-2),('m_snapshotPoint',74,-1)]]),  #75
+    ('_choice',[(0,2),{0:('None',72),1:('TargetPoint',74),2:('TargetUnit',75),3:('Data',5)}]),  #76
+    ('_optional',[5]),  #77
+    ('_struct',[[('m_cmdFlags',68,-8),('m_abil',71,-7),('m_data',76,-6),('m_otherUnit',77,-5)]]),  #78
+    ('_array',[(0,8),8]),  #79
+    ('_choice',[(0,2),{0:('None',72),1:('Mask',42),2:('OneIndices',79),3:('ZeroIndices',79)}]),  #80
+    ('_struct',[[('m_unitLink',69,-3),('m_intraSubgroupPriority',8,-2),('m_count',8,-1)]]),  #81
+    ('_array',[(0,8),81]),  #82
+    ('_array',[(0,8),5]),  #83
+    ('_struct',[[('m_subgroupIndex',8,-4),('m_removeMask',80,-3),('m_addSubgroups',82,-2),('m_addUnitTags',83,-1)]]),  #84
+    ('_struct',[[('m_controlGroupId',1,-6),('m_delta',84,-5)]]),  #85
+    ('_struct',[[('m_controlGroupIndex',1,-7),('m_controlGroupUpdate',17,-6),('m_mask',80,-5)]]),  #86
+    ('_struct',[[('m_count',8,-6),('m_subgroupCount',8,-5),('m_activeSubgroupIndex',8,-4),('m_unitTagsChecksum',5,-3),('m_subgroupIndicesChecksum',5,-2),('m_subgroupsChecksum',5,-1)]]),  #87
+    ('_struct',[[('m_controlGroupId',1,-6),('m_selectionSyncData',87,-5)]]),  #88
+    ('_array',[(0,3),64]),  #89
+    ('_struct',[[('m_recipientId',1,-6),('m_resources',89,-5)]]),  #90
+    ('_struct',[[('m_chatMessage',21,-5)]]),  #91
+    ('_int',[(-128,8)]),  #92
+    ('_struct',[[('x',64,-3),('y',64,-2),('z',64,-1)]]),  #93
+    ('_struct',[[('m_beacon',92,-11),('m_ally',92,-10),('m_autocast',92,-9),('m_targetUnitTag',5,-8),('m_targetUnitSnapshotUnitLink',69,-7),('m_targetUnitSnapshotPlayerId',47,-6),('m_targetPoint',93,-5)]]),  #94
+    ('_struct',[[('m_speed',10,-5)]]),  #95
+    ('_struct',[[('m_delta',92,-5)]]),  #96
+    ('_struct',[[('m_verb',21,-6),('m_arguments',21,-5)]]),  #97
+    ('_struct',[[('m_alliance',5,-6),('m_control',5,-5)]]),  #98
+    ('_struct',[[('m_unitTag',5,-5)]]),  #99
+    ('_struct',[[('m_unitTag',5,-6),('m_flags',8,-5)]]),  #100
+    ('_struct',[[('m_conversationId',64,-6),('m_replyId',64,-5)]]),  #101
+    ('_struct',[[('m_purchaseItemId',64,-5)]]),  #102
+    ('_struct',[[('m_difficultyLevel',64,-5)]]),  #103
+    ('_choice',[(0,3),{0:('None',72),1:('Checked',24),2:('ValueChanged',5),3:('SelectionChanged',64),4:('TextChanged',22)}]),  #104
+    ('_struct',[[('m_controlId',64,-7),('m_eventType',64,-6),('m_eventData',104,-5)]]),  #105
+    ('_struct',[[('m_soundHash',5,-6),('m_length',5,-5)]]),  #106
+    ('_struct',[[('m_soundHash',83,-2),('m_length',83,-1)]]),  #107
+    ('_struct',[[('m_syncInfo',107,-5)]]),  #108
+    ('_struct',[[('m_sound',5,-5)]]),  #109
+    ('_struct',[[('m_transmissionId',64,-5)]]),  #110
+    ('_struct',[[('x',69,-2),('y',69,-1)]]),  #111
+    ('_optional',[69]),  #112
+    ('_struct',[[('m_target',111,-8),('m_distance',112,-7),('m_pitch',112,-6),('m_yaw',112,-5)]]),  #113
+    ('_int',[(0,1)]),  #114
+    ('_struct',[[('m_skipType',114,-5)]]),  #115
+    ('_struct',[[('m_button',5,-11),('m_down',24,-10),('m_posXUI',5,-9),('m_posYUI',5,-8),('m_posXWorld',64,-7),('m_posYWorld',64,-6),('m_posZWorld',64,-5)]]),  #116
+    ('_struct',[[('m_soundtrack',5,-5)]]),  #117
+    ('_struct',[[('m_planetId',64,-5)]]),  #118
+    ('_struct',[[('m_key',92,-6),('m_flags',92,-5)]]),  #119
+    ('_struct',[[('m_resources',89,-5)]]),  #120
+    ('_struct',[[('m_fulfillRequestId',64,-5)]]),  #121
+    ('_struct',[[('m_cancelRequestId',64,-5)]]),  #122
+    ('_struct',[[('m_researchItemId',64,-5)]]),  #123
+    ('_struct',[[('m_laggingPlayerId',1,-5)]]),  #124
+    ('_struct',[[('m_mercenaryId',64,-5)]]),  #125
+    ('_struct',[[('m_battleReportId',64,-6),('m_difficultyLevel',64,-5)]]),  #126
+    ('_struct',[[('m_battleReportId',64,-5)]]),  #127
+    ('_int',[(0,19)]),  #128
+    ('_struct',[[('m_decrementMs',128,-5)]]),  #129
+    ('_struct',[[('m_portraitId',64,-5)]]),  #130
+    ('_struct',[[('m_functionName',13,-5)]]),  #131
+    ('_struct',[[('m_result',64,-5)]]),  #132
+    ('_struct',[[('m_gameMenuItemIndex',64,-5)]]),  #133
+    ('_struct',[[('m_reason',92,-5)]]),  #134
+    ('_struct',[[('m_purchaseCategoryId',64,-5)]]),  #135
+    ('_struct',[[('m_button',69,-5)]]),  #136
+    ('_struct',[[('m_recipient',17,-3),('m_string',22,-2)]]),  #137
+    ('_struct',[[('m_recipient',17,-3),('m_point',65,-2)]]),  #138
+    ('_struct',[[('m_progress',64,-2)]]),  #139
 ]
 
 # Map from protocol NNet.Game.*Event eventid to (typeid, name)
 game_event_types = {
-    5: (63, 'NNet.Game.SUserFinishedLoadingSyncEvent'),
-    7: (57, 'NNet.Game.SBankFileEvent'),
-    8: (59, 'NNet.Game.SBankSectionEvent'),
-    9: (60, 'NNet.Game.SBankKeyEvent'),
-    10: (61, 'NNet.Game.SBankValueEvent'),
-    11: (62, 'NNet.Game.SUserOptionsEvent'),
-    22: (64, 'NNet.Game.SSaveGameEvent'),
-    23: (63, 'NNet.Game.SSaveGameDoneEvent'),
-    25: (63, 'NNet.Game.SPlayerLeaveEvent'),
-    26: (68, 'NNet.Game.SGameCheatEvent'),
-    27: (79, 'NNet.Game.SCmdEvent'),
-    28: (86, 'NNet.Game.SSelectionDeltaEvent'),
-    29: (87, 'NNet.Game.SControlGroupUpdateEvent'),
-    30: (89, 'NNet.Game.SSelectionSyncCheckEvent'),
-    31: (91, 'NNet.Game.SResourceTradeEvent'),
-    32: (92, 'NNet.Game.STriggerChatMessageEvent'),
-    33: (95, 'NNet.Game.SAICommunicateEvent'),
-    34: (96, 'NNet.Game.SSetAbsoluteGameSpeedEvent'),
-    35: (97, 'NNet.Game.SAddAbsoluteGameSpeedEvent'),
-    37: (98, 'NNet.Game.SBroadcastCheatEvent'),
-    38: (99, 'NNet.Game.SAllianceEvent'),
-    39: (100, 'NNet.Game.SUnitClickEvent'),
-    40: (101, 'NNet.Game.SUnitHighlightEvent'),
-    41: (102, 'NNet.Game.STriggerReplySelectedEvent'),
-    44: (63, 'NNet.Game.STriggerSkippedEvent'),
-    45: (107, 'NNet.Game.STriggerSoundLengthQueryEvent'),
-    46: (110, 'NNet.Game.STriggerSoundOffsetEvent'),
-    47: (111, 'NNet.Game.STriggerTransmissionOffsetEvent'),
-    48: (111, 'NNet.Game.STriggerTransmissionCompleteEvent'),
-    49: (114, 'NNet.Game.SCameraUpdateEvent'),
-    50: (63, 'NNet.Game.STriggerAbortMissionEvent'),
-    51: (103, 'NNet.Game.STriggerPurchaseMadeEvent'),
-    52: (63, 'NNet.Game.STriggerPurchaseExitEvent'),
-    53: (104, 'NNet.Game.STriggerPlanetMissionLaunchedEvent'),
-    54: (63, 'NNet.Game.STriggerPlanetPanelCanceledEvent'),
-    55: (106, 'NNet.Game.STriggerDialogControlEvent'),
-    56: (109, 'NNet.Game.STriggerSoundLengthSyncEvent'),
-    57: (116, 'NNet.Game.STriggerConversationSkippedEvent'),
-    58: (117, 'NNet.Game.STriggerMouseClickedEvent'),
-    63: (63, 'NNet.Game.STriggerPlanetPanelReplayEvent'),
-    64: (118, 'NNet.Game.STriggerSoundtrackDoneEvent'),
-    65: (119, 'NNet.Game.STriggerPlanetMissionSelectedEvent'),
-    66: (120, 'NNet.Game.STriggerKeyPressedEvent'),
-    67: (132, 'NNet.Game.STriggerMovieFunctionEvent'),
-    68: (63, 'NNet.Game.STriggerPlanetPanelBirthCompleteEvent'),
-    69: (63, 'NNet.Game.STriggerPlanetPanelDeathCompleteEvent'),
-    70: (121, 'NNet.Game.SResourceRequestEvent'),
-    71: (122, 'NNet.Game.SResourceRequestFulfillEvent'),
-    72: (123, 'NNet.Game.SResourceRequestCancelEvent'),
-    73: (63, 'NNet.Game.STriggerResearchPanelExitEvent'),
-    74: (63, 'NNet.Game.STriggerResearchPanelPurchaseEvent'),
-    75: (124, 'NNet.Game.STriggerResearchPanelSelectionChangedEvent'),
-    76: (125, 'NNet.Game.SLagMessageEvent'),
-    77: (63, 'NNet.Game.STriggerMercenaryPanelExitEvent'),
-    78: (63, 'NNet.Game.STriggerMercenaryPanelPurchaseEvent'),
-    79: (126, 'NNet.Game.STriggerMercenaryPanelSelectionChangedEvent'),
-    80: (63, 'NNet.Game.STriggerVictoryPanelExitEvent'),
-    81: (63, 'NNet.Game.STriggerBattleReportPanelExitEvent'),
-    82: (127, 'NNet.Game.STriggerBattleReportPanelPlayMissionEvent'),
-    83: (128, 'NNet.Game.STriggerBattleReportPanelPlaySceneEvent'),
-    84: (128, 'NNet.Game.STriggerBattleReportPanelSelectionChangedEvent'),
-    85: (104, 'NNet.Game.STriggerVictoryPanelPlayMissionAgainEvent'),
-    86: (63, 'NNet.Game.STriggerMovieStartedEvent'),
-    87: (63, 'NNet.Game.STriggerMovieFinishedEvent'),
-    88: (130, 'NNet.Game.SDecrementGameTimeRemainingEvent'),
-    89: (131, 'NNet.Game.STriggerPortraitLoadedEvent'),
-    90: (133, 'NNet.Game.STriggerCustomDialogDismissedEvent'),
-    91: (134, 'NNet.Game.STriggerGameMenuItemSelectedEvent'),
-    92: (135, 'NNet.Game.STriggerCameraMoveEvent'),
-    93: (103, 'NNet.Game.STriggerPurchasePanelSelectedPurchaseItemChangedEvent'),
-    94: (136, 'NNet.Game.STriggerPurchasePanelSelectedPurchaseCategoryChangedEvent'),
-    95: (137, 'NNet.Game.STriggerButtonPressedEvent'),
-    96: (63, 'NNet.Game.STriggerGameCreditsFinishedEvent'),
+    5: (62, 'NNet.Game.SUserFinishedLoadingSyncEvent'),
+    7: (56, 'NNet.Game.SBankFileEvent'),
+    8: (58, 'NNet.Game.SBankSectionEvent'),
+    9: (59, 'NNet.Game.SBankKeyEvent'),
+    10: (60, 'NNet.Game.SBankValueEvent'),
+    11: (61, 'NNet.Game.SUserOptionsEvent'),
+    22: (63, 'NNet.Game.SSaveGameEvent'),
+    23: (62, 'NNet.Game.SSaveGameDoneEvent'),
+    25: (62, 'NNet.Game.SPlayerLeaveEvent'),
+    26: (67, 'NNet.Game.SGameCheatEvent'),
+    27: (78, 'NNet.Game.SCmdEvent'),
+    28: (85, 'NNet.Game.SSelectionDeltaEvent'),
+    29: (86, 'NNet.Game.SControlGroupUpdateEvent'),
+    30: (88, 'NNet.Game.SSelectionSyncCheckEvent'),
+    31: (90, 'NNet.Game.SResourceTradeEvent'),
+    32: (91, 'NNet.Game.STriggerChatMessageEvent'),
+    33: (94, 'NNet.Game.SAICommunicateEvent'),
+    34: (95, 'NNet.Game.SSetAbsoluteGameSpeedEvent'),
+    35: (96, 'NNet.Game.SAddAbsoluteGameSpeedEvent'),
+    37: (97, 'NNet.Game.SBroadcastCheatEvent'),
+    38: (98, 'NNet.Game.SAllianceEvent'),
+    39: (99, 'NNet.Game.SUnitClickEvent'),
+    40: (100, 'NNet.Game.SUnitHighlightEvent'),
+    41: (101, 'NNet.Game.STriggerReplySelectedEvent'),
+    44: (62, 'NNet.Game.STriggerSkippedEvent'),
+    45: (106, 'NNet.Game.STriggerSoundLengthQueryEvent'),
+    46: (109, 'NNet.Game.STriggerSoundOffsetEvent'),
+    47: (110, 'NNet.Game.STriggerTransmissionOffsetEvent'),
+    48: (110, 'NNet.Game.STriggerTransmissionCompleteEvent'),
+    49: (113, 'NNet.Game.SCameraUpdateEvent'),
+    50: (62, 'NNet.Game.STriggerAbortMissionEvent'),
+    51: (102, 'NNet.Game.STriggerPurchaseMadeEvent'),
+    52: (62, 'NNet.Game.STriggerPurchaseExitEvent'),
+    53: (103, 'NNet.Game.STriggerPlanetMissionLaunchedEvent'),
+    54: (62, 'NNet.Game.STriggerPlanetPanelCanceledEvent'),
+    55: (105, 'NNet.Game.STriggerDialogControlEvent'),
+    56: (108, 'NNet.Game.STriggerSoundLengthSyncEvent'),
+    57: (115, 'NNet.Game.STriggerConversationSkippedEvent'),
+    58: (116, 'NNet.Game.STriggerMouseClickedEvent'),
+    63: (62, 'NNet.Game.STriggerPlanetPanelReplayEvent'),
+    64: (117, 'NNet.Game.STriggerSoundtrackDoneEvent'),
+    65: (118, 'NNet.Game.STriggerPlanetMissionSelectedEvent'),
+    66: (119, 'NNet.Game.STriggerKeyPressedEvent'),
+    67: (131, 'NNet.Game.STriggerMovieFunctionEvent'),
+    68: (62, 'NNet.Game.STriggerPlanetPanelBirthCompleteEvent'),
+    69: (62, 'NNet.Game.STriggerPlanetPanelDeathCompleteEvent'),
+    70: (120, 'NNet.Game.SResourceRequestEvent'),
+    71: (121, 'NNet.Game.SResourceRequestFulfillEvent'),
+    72: (122, 'NNet.Game.SResourceRequestCancelEvent'),
+    73: (62, 'NNet.Game.STriggerResearchPanelExitEvent'),
+    74: (62, 'NNet.Game.STriggerResearchPanelPurchaseEvent'),
+    75: (123, 'NNet.Game.STriggerResearchPanelSelectionChangedEvent'),
+    76: (124, 'NNet.Game.SLagMessageEvent'),
+    77: (62, 'NNet.Game.STriggerMercenaryPanelExitEvent'),
+    78: (62, 'NNet.Game.STriggerMercenaryPanelPurchaseEvent'),
+    79: (125, 'NNet.Game.STriggerMercenaryPanelSelectionChangedEvent'),
+    80: (62, 'NNet.Game.STriggerVictoryPanelExitEvent'),
+    81: (62, 'NNet.Game.STriggerBattleReportPanelExitEvent'),
+    82: (126, 'NNet.Game.STriggerBattleReportPanelPlayMissionEvent'),
+    83: (127, 'NNet.Game.STriggerBattleReportPanelPlaySceneEvent'),
+    84: (127, 'NNet.Game.STriggerBattleReportPanelSelectionChangedEvent'),
+    85: (103, 'NNet.Game.STriggerVictoryPanelPlayMissionAgainEvent'),
+    86: (62, 'NNet.Game.STriggerMovieStartedEvent'),
+    87: (62, 'NNet.Game.STriggerMovieFinishedEvent'),
+    88: (129, 'NNet.Game.SDecrementGameTimeRemainingEvent'),
+    89: (130, 'NNet.Game.STriggerPortraitLoadedEvent'),
+    90: (132, 'NNet.Game.STriggerCustomDialogDismissedEvent'),
+    91: (133, 'NNet.Game.STriggerGameMenuItemSelectedEvent'),
+    92: (134, 'NNet.Game.STriggerCameraMoveEvent'),
+    93: (102, 'NNet.Game.STriggerPurchasePanelSelectedPurchaseItemChangedEvent'),
+    94: (135, 'NNet.Game.STriggerPurchasePanelSelectedPurchaseCategoryChangedEvent'),
+    95: (136, 'NNet.Game.STriggerButtonPressedEvent'),
+    96: (62, 'NNet.Game.STriggerGameCreditsFinishedEvent'),
 }
 
 # The typeid of the NNet.Game.EEventId enum.
@@ -248,29 +248,40 @@ game_eventid_typeid = 0
 
 # Map from protocol NNet.Game.*Message eventid to (typeid, name)
 message_event_types = {
-    0: (138, 'NNet.Game.SChatMessage'),
-    1: (139, 'NNet.Game.SPingMessage'),
-    2: (140, 'NNet.Game.SLoadingProgressMessage'),
-    3: (63, 'NNet.Game.SServerPingMessage'),
+    0: (137, 'NNet.Game.SChatMessage'),
+    1: (138, 'NNet.Game.SPingMessage'),
+    2: (139, 'NNet.Game.SLoadingProgressMessage'),
+    3: (62, 'NNet.Game.SServerPingMessage'),
 }
 
 # The typeid of the NNet.Game.EMessageId enum.
 message_eventid_typeid = 1
 
+# Map from protocol NNet.Replay.Tracker.*Event eventid to (typeid, name)
+tracker_event_types = {
+}
+
+# NOTE: older builds may not support some types and the generated methods
+# may fail to function properly, if specific backwards compatibility is 
+# needed these values should be tested against for None
+
+# The typeid of the NNet.Replay.Tracker.EEventId enum.
+tracker_eventid_typeid = None 
+
 # The typeid of NNet.SVarUint32 (the type used to encode gameloop deltas).
 svaruint32_typeid = 6
 
-# The typeid of NNet.Replay.SPlayerId (the type used to encode player ids).
-replay_playerid_typeid = 8
+# The typeid of NNet.Replay.SGameUserId (the type used to encode player ids).
+replay_userid_typeid = None
 
 # The typeid of NNet.Replay.SHeader (the type used to store replay game version and length).
-replay_header_typeid = 13
+replay_header_typeid = 11
 
 # The typeid of NNet.Game.SDetails (the type used to store overall replay details).
-game_details_typeid = 32
+game_details_typeid = 30
 
 # The typeid of NNet.Replay.SInitData (the type used to store the inital lobby).
-replay_initdata_typeid = 56
+replay_initdata_typeid = 55
 
 
 def _varuint32_value(value):
@@ -280,7 +291,7 @@ def _varuint32_value(value):
     return 0
 
 
-def _decode_event_stream(decoder, eventid_typeid, event_types, decode_player_id):
+def _decode_event_stream(decoder, eventid_typeid, event_types, decode_user_id):
     # Decodes events prefixed with a gameloop and possibly userid
     gameloop = 0
     while not decoder.done():
@@ -291,8 +302,8 @@ def _decode_event_stream(decoder, eventid_typeid, event_types, decode_player_id)
         gameloop += delta
 
         # decode the userid before each event
-        if decode_player_id:
-            playerid = decoder.instance(replay_playerid_typeid)
+        if decode_user_id:
+            userid = decoder.instance(replay_userid_typeid)
 
         # decode the event id
         eventid = decoder.instance(eventid_typeid)
@@ -307,8 +318,8 @@ def _decode_event_stream(decoder, eventid_typeid, event_types, decode_player_id)
 
         #  insert gameloop and userid
         event['_gameloop'] = gameloop
-        if decode_player_id:
-            event['_playerid'] = playerid
+        if decode_user_id:
+            event['_userid'] = userid
 
         # the next event is byte aligned
         decoder.byte_align()
@@ -325,7 +336,7 @@ def decode_replay_game_events(contents):
     for event in _decode_event_stream(decoder,
                                       game_eventid_typeid,
                                       game_event_types,
-                                      decode_player_id=True):
+                                      decode_user_id=True):
         yield event
 
 
@@ -335,7 +346,17 @@ def decode_replay_message_events(contents):
     for event in _decode_event_stream(decoder,
                                       message_eventid_typeid,
                                       message_event_types,
-                                      decode_player_id=True):
+                                      decode_user_id=True):
+        yield event
+
+
+def decode_replay_tracker_events(contents):
+    """Decodes and yields each tracker event from the contents byte string."""
+    decoder = VersionedDecoder(contents, typeinfos)
+    for event in _decode_event_stream(decoder,
+                                      tracker_eventid_typeid,
+                                      tracker_event_types,
+                                      decode_user_id=False):
         yield event
 
 
@@ -362,7 +383,7 @@ def decode_replay_attributes_events(contents):
     buffer = BitPackedBuffer(contents, 'little')
     attributes = {}
     if not buffer.done():
-        attributes['source'] = None
+        attributes['source'] = buffer.read_bits(8)
         attributes['mapNamespace'] = buffer.read_bits(32)
         count = buffer.read_bits(32)
         attributes['scopes'] = {}
