@@ -55,3 +55,22 @@ The standalone tool uses [mpyq](https://github.com/eagleflo/mpyq/) to read mopaq
 
 Thanks to David Joerg and Graylin Kim of [GGTracker](http://www.ggtracker.com) for design feedback and beta-testing.
 
+# Ports and Related Projects
+
+There are unofficial ports of s2protocol (and the required MPQ parser) available in other languages:
+
+### Go
+
+This Go implementation is a standalone project for both the MPQ parser and the s2protocol implementation (also provide some higher level API):
+
+**Go MPQ parser:** https://github.com/icza/mpq
+
+**Go s2protocol:** https://github.com/icza/s2prot
+
+### Java
+
+This Java implementation is part of the open source [Scelight](https://github.com/icza/scelight) project (which is much more than just a replay parser, it also gives a high-level API):
+
+**Java MPQ parser:** https://github.com/icza/scelight/tree/master/src-app-libs/hu/belicza/andras/mpq
+
+**Java s2protocol:** https://github.com/icza/scelight/tree/master/src-app/hu/scelight/sc2/rep/s2prot
