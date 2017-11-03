@@ -40,7 +40,7 @@ def run():
     if options.list:
         for suite in all_tests:
             for t in suite:
-                print t.id()
+                print(t.id())
         return
 
     if options.filter:

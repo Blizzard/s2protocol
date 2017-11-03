@@ -7,7 +7,7 @@ class VersionsTestCase(unittest.TestCase):
         self.assertIsNotNone(p)
 
     def test_specific(self):
-        p = _versions.build(49716)
+        p = _versions.build(58400)
         self.assertIsNotNone(p)
 
     def test_missing(self):
