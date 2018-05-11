@@ -13,8 +13,8 @@
 if (strpos($cache_handle,hash("sha256","Standard Data: Swarm.SC2Mod")) !== false) {//HOTS} 
 else if (strpos($cache_handle,hash("sha256","Standard Data: Void.SC2Mod")) !== false) {//LOTV} 
 else if (strpos($cache_handle,hash("sha256","Standard Data: Liberty.SC2Mod")) !== false) {//WOL} 
-> ```
-
+```
+ 
 **m_timeUTC**
 
 > UTC time of the replay played date (dont recall off hand if its the start or end date)

@@ -23,21 +23,21 @@ The Header flag will return some basic information about the replay, version, ga
 ```
 
 
-####---details
+#### ---details
 The Details flag gives an overview of the replays information  
 [More Information](flags/details.md)
 
-####---initdata
-The initdata flag gives the lobby state with some basic information about the players in the lobby.
+#### ---initdata
+The initdata flag gives the lobby state with some basic information about the players in the lobby.  
 [More Information](flags/initdata.md)
 
-####---messageevents
+#### ---messageevents
 The messageevents flag gives all the chat messages in the game.   
 [More Information](flags/initdata.md)
 
 
 
-###Common keys
+### Common keys
 
 **_gameloop**
 > 
