@@ -71,21 +71,3 @@ To control the output format:
 
 * ``--json``: Outputs events as JSON structured documents
 * ``--ndjson``: Like --json but is each event is newline delimited
-
-
-Using s2protocol Programmatically
-=================================
-
-If you're looking to do more than just look at a single replay's output once,
-you'll want to explore the programmatic API. Loading a replay & printing its
-header looks like::
-
-    >>> import mpyq
-
-    # Using mpyq, load the replay file.
-    >>> archive = mpyq.MPQArchive('~/Desktop/my_pvp_replay.SC2Replay')
-    >>> contents = archive.header['user_data_header']['content']
-
-    # Now parse the header information.
-    >>> from s2protocol import versions
-    >>> header = versions.latest().decode_replay_header(contents)
