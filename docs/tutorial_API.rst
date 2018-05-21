@@ -49,3 +49,19 @@ Or to get the ingame messages you can do:
 
 	>>> contents = archive.read_file('replay.message.events')
 	>>> messageEvents = protocol.decode_replay_message_events(contents)
+	
+	
+Now you can perfom any operation you like on these objects. For example if you are just interested in ``NNet.Game.SCmdEvent`` you can filter the game events like this:
+
+	>>> cmdEventList = []
+	>>> for event in gameEvents:
+	>>> 	if event['_event'] == 'NNet.Game.SCmdEvent':
+	>>> 		cmdEventList.append(event)
+	
+Of course you always have the option to export your current selection as JSON to a textfile and use other environments or tools for your exploratory data analysis. To export your data to a JSON file you can do:
+
+	>>> import json
+	>>> json_data = json.dumps(cmdEventList, indent=4)
+	>>> output_file = open("someJSONFile.json", "w")
+	>>> output_file.write(json_data)
+	>>> output_file.close()
