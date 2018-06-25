@@ -4,7 +4,7 @@
 import subprocess
 
 def game_version():
-    return "4.4.0.65895.0"
+    return "4.4.0.65895.1"
 
 
 def read_command_output(cmd):
