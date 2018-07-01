@@ -169,6 +169,7 @@ typeinfos = [
     ('_struct',[[('m_recipient',17,-3),('m_string',22,-2)]]),  #142
     ('_struct',[[('m_recipient',17,-3),('m_point',67,-2)]]),  #143
     ('_struct',[[('m_progress',66,-2)]]),  #144
+    ('_struct',[[('m_playerId',37,-1)]]),  #145
 ]
 
 # Map from protocol NNet.Game.*Event eventid to (typeid, name)
@@ -279,7 +280,7 @@ tracker_eventid_typeid = None
 svaruint32_typeid = 6
 
 # The typeid of NNet.Replay.SGameUserId (the type used to encode player ids).
-replay_userid_typeid = None
+replay_userid_typeid = 145
 
 # The typeid of NNet.Replay.SHeader (the type used to store replay game version and length).
 replay_header_typeid = 11
