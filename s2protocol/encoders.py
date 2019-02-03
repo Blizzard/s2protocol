@@ -112,7 +112,7 @@ class BitPackedEncoder:
     def _choice(self, value, bounds, fields):
         #assert isinstance(value, dict)
         assert len(value) == 1
-        for tag, field in fields.iteritems():
+        for tag, field in fields.items():
             if field[0] in value:
                 self._int(tag, bounds)
                 self.instance(value[field[0]], field[1])
@@ -222,7 +222,7 @@ class VersionedEncoder:
         #assert isinstance(value, dict)
         assert len(value) == 1
         self._write_skip(3)
-        for tag, field in fields.iteritems():
+        for tag, field in fields.items():
             if field[0] in value:
                 self._vint(tag)
                 self.instance(value[field[0]], field[1])

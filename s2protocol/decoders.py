@@ -40,7 +40,7 @@ class BitPackedBuffer:
     def __str__(self):
         return 'buffer(%02x/%d,[%d]=%s)' % (
             self._nextbits and self._next or 0, self._nextbits,
-            self._used, '%02x' % (ord(self._data[self._used]),) if (self._used < len(self._data)) else '--')
+            self._used, '%02x' % (self._data[self._used],) if (self._used < len(self._data)) else '--')
 
     def done(self):
         return self._nextbits == 0 and self._used >= len(self._data)
@@ -66,7 +66,7 @@ class BitPackedBuffer:
             if self._nextbits == 0:
                 if self.done():
                     raise TruncatedError(self)
-                self._next = ord(self._data[self._used])
+                self._next = self._data[self._used]
                 self._used += 1
                 self._nextbits = 8
             copybits = min(bits - resultbits, self._nextbits)
@@ -81,7 +81,7 @@ class BitPackedBuffer:
         return result
 
     def read_unaligned_bytes(self, bytes):
-        return ''.join([chr(self.read_bits(8)) for i in xrange(bytes)])
+        return ''.join([chr(self.read_bits(8)) for i in range(bytes)])
 
 
 class BitPackedDecoder:
@@ -110,7 +110,7 @@ class BitPackedDecoder:
 
     def _array(self, bounds, typeid):
         length = self._int(bounds)
-        return [self.instance(typeid) for i in xrange(length)]
+        return [self.instance(typeid) for i in range(length)]
 
     def _bitarray(self, bounds):
         length = self._int(bounds)
@@ -119,7 +119,7 @@ class BitPackedDecoder:
     def _blob(self, bounds):
         length = self._int(bounds)
         result = self._buffer.read_aligned_bytes(length)
-        return result
+        return result.decode('unicode_escape')
 
     def _bool(self):
         return self._int((0, 1)) != 0
@@ -132,7 +132,8 @@ class BitPackedDecoder:
         return {field[0]: self.instance(field[1])}
 
     def _fourcc(self):
-        return self._buffer.read_unaligned_bytes(4)
+        result = self._buffer.read_unaligned_bytes(4)
+        return result.strip(b'\x00').decode('ascii')
 
     def _int(self, bounds):
         return bounds[0] + self._buffer.read_bits(bounds[1])
@@ -207,7 +208,7 @@ class VersionedDecoder:
     def _array(self, bounds, typeid):
         self._expect_skip(0)
         length = self._vint()
-        return [self.instance(typeid) for i in xrange(length)]
+        return [self.instance(typeid) for i in range(length)]
 
     def _bitarray(self, bounds):
         self._expect_skip(1)
@@ -217,7 +218,8 @@ class VersionedDecoder:
     def _blob(self, bounds):
         self._expect_skip(2)
         length = self._vint()
-        return self._buffer.read_aligned_bytes(length)
+        result = self._buffer.read_aligned_bytes(length)
+        return result.decode('unicode_escape')
 
     def _bool(self):
         self._expect_skip(6)
@@ -234,7 +236,8 @@ class VersionedDecoder:
 
     def _fourcc(self):
         self._expect_skip(7)
-        return self._buffer.read_aligned_bytes(4)
+        result = self._buffer.read_aligned_bytes(4)
+        return result.strip(b'\x00').decode('ascii')
 
     def _int(self, bounds):
         self._expect_skip(9)
@@ -260,7 +263,7 @@ class VersionedDecoder:
         self._expect_skip(5)
         result = {}
         length = self._vint()
-        for i in xrange(length):
+        for i in range(length):
             tag = self._vint()
             field = next((f for f in fields if f[2] == tag), None)
             if field:
@@ -282,7 +285,7 @@ class VersionedDecoder:
         skip = self._buffer.read_bits(8)
         if skip == 0:  # array
             length = self._vint()
-            for i in xrange(length):
+            for i in range(length):
                 self._skip_instance()
         elif skip == 1:  # bitblob
             length = self._vint()
@@ -299,7 +302,7 @@ class VersionedDecoder:
                 self._skip_instance()
         elif skip == 5:  # struct
             length = self._vint()
-            for i in xrange(length):
+            for i in range(length):
                 tag = self._vint()
                 self._skip_instance()
         elif skip == 6:  # u8
