@@ -34,7 +34,7 @@ class JSONOutputFilter(EventFilter):
         self._output = output
 
     def process(self, event):
-        print >> self._output, json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True, indent=4)
+        print(json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True, indent=4))
         return event
 
 
@@ -44,7 +44,7 @@ class NDJSONOutputFilter(EventFilter):
         self._output = output
 
     def process(self, event):
-        print >> self._output, json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True)
+        print(self._output, json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True))
         return event
 
 
@@ -91,7 +91,7 @@ class StatCollectionFilter(EventFilter):
         return event
 
     def finish(self):
-        print >> sys.stdout, 'Name, Count, Bits'
+        print('Name, Count, Bits')
         for name, stat in sorted(self._event_stats.iteritems(), key=lambda x: x[1][1]):
             print('"{:s}", {:d}, {:d}'.format(name, stat[0], stat[1] / 8))
 
@@ -246,23 +246,23 @@ def main():
         for f in files:
             captured.append(pattern.match(f).group(1))
             if len(captured) == 8:
-                print >> sys.stdout, captured[0:8]
+                print(captured[0:8])
                 captured = []
-        print >> sys.stdout, captured
+        print(captured)
         return
 
     # Diff two protocols
     if args.diff and args.diff is not None:
         version_list = args.diff.split(',')
         if len(version_list) < 2:
-            print >> sys.stderr, "--diff requires two versions separated by comma e.g. --diff=1,2"
+            print("--diff requires two versions separated by comma e.g. --diff=1,2")
             sys.exit(1)
         diff.diff(version_list[0], version_list[1])
         return
 
     # Check/test the replay file
     if args.replay_file is None:
-        print >> sys.stderr, ".S2Replay file not specified"
+        print(".S2Replay file not specified")
         sys.exit(1)
 
     archive = mpyq.MPQArchive(args.replay_file)
@@ -297,7 +297,8 @@ def main():
     try:
         protocol = versions.build(baseBuild)
     except Exception, e:
-        print >> sys.stderr, 'Unsupported base build: {0} ({1})'.format(baseBuild, str(e))
+        print('Unsupported base build: {0} ({1})'.format(baseBuild, str(e)),
+              file=sys.stderr)
         sys.exit(1)
 
     # Process game metadata
@@ -362,13 +363,13 @@ def main():
 
     if args.profile:
         pr.disable()
-        print "Profiler Results"
-        print "----------------"
+        print("Profiler Results")
+        print("----------------")
         s = StringIO.StringIO()
         sortby = 'cumulative'
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
         ps.print_stats()
-        print s.getvalue()
+        print(s.getvalue())
 
 if __name__ == '__main__':
     main()
