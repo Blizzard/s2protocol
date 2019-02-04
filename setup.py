@@ -5,9 +5,13 @@ import s2protocol.build
 
 install_requires = [
     'mpyq >= 0.2.2',
+    'six >= 1.12.0, < 1.13',
+]
+tests_require = [
+    'tox',
 ]
 
-if float(sys.version[:3]) < 2.7:
+if sys.version_info < (2, 7):
     install_requires.append('argparse')
 
 
@@ -36,9 +40,10 @@ setup(
         'Topic :: Software Development :: Libraries',
         'Topic :: System :: Archiving',
     ],
-    install_requires=[
-        'mpyq'
-    ],
+    install_requires=install_requires,
+    extras_require={
+        'tests': tests_require,
+    },
     entry_points={
         'console_scripts': [
             's2protocol = s2protocol.s2protocol:main',
