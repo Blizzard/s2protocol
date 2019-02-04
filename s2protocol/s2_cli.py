@@ -93,7 +93,7 @@ class StatCollectionFilter(EventFilter):
     def finish(self):
         print >> sys.stdout, 'Name, Count, Bits'
         for name, stat in sorted(self._event_stats.iteritems(), key=lambda x: x[1][1]):
-            print >> sys.stdout, '"%s", %d, %d' % (name, stat[0], stat[1] / 8)
+            print('"{:s}", {:d}, {:d}'.format(name, stat[0], stat[1] / 8))
 
 
 def convert_fourcc(fourcc_hex):
