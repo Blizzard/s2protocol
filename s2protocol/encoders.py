@@ -20,6 +20,8 @@
 
 import struct
 
+from .compat import byte_to_int
+
 class IncompleteError(Exception):
     pass
 
@@ -68,7 +70,7 @@ class BitPackedBuffer:
     def write_unaligned_bytes(self, data):
         assert isinstance(data, str)
         for c in data:
-            self.write_bits(ord(c), 8)
+            self.write_bits(byte_to_int(c), 8)
 
 class BitPackedEncoder:
     def __init__(self, output, typeinfos):
