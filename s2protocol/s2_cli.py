@@ -102,7 +102,7 @@ def convert_fourcc(fourcc_hex):
     represpentation to a string.
     """
     s = []
-    for i in xrange(0, 7, 2):
+    for i in range(0, 7, 2):
         n = int(fourcc_hex[i:i+2], 16)
         if n is not 0:
             s.append(chr(n))

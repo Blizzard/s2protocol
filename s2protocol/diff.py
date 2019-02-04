@@ -44,7 +44,7 @@ def diff(protocol_a_ver, protocol_b_ver):
     print >> sys.stdout, "Count of typeinfos: {} {}".format(
             count_a, count_b)
 
-    for index in xrange(max(count_a, count_b)):
+    for index in range(max(count_a, count_b)):
         if index >= count_a:
             print >> sys.stdout, "Protocol {} missing typeinfo {}".format(protocol_a_ver, index)
             continue
