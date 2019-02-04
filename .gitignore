@@ -13,3 +13,5 @@ env
 dist
 build
 *.egg-info
+
+.tox
