@@ -40,9 +40,14 @@ class BitPackedBuffer:
         self._bigendian = (endian == 'big')
 
     def __str__(self):
-        return 'buffer(%02x/%d,[%d]=%s)' % (
-            self._nextbits and self._next or 0, self._nextbits,
-            self._used, '%02x' % (ord(self._data[self._used]),) if (self._used < len(self._data)) else '--')
+        s = '{:02x}'.format(byte_to_int(self._data[self._used])) \
+            if self._used < len(self._data) else '--'
+        return 'buffer({0:02x}/{1:d},[{2:d}]={3:s})'.format(
+            self._nextbits and self._next or 0,
+            self._nextbits,
+            self._used,
+            s
+        )
 
     def done(self):
         return self._nextbits == 0 and self._used >= len(self._data)
