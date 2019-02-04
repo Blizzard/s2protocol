@@ -20,6 +20,8 @@
 
 import struct
 
+from .compat import byte_to_int
+
 
 class TruncatedError(Exception):
     pass
@@ -66,7 +68,7 @@ class BitPackedBuffer:
             if self._nextbits == 0:
                 if self.done():
                     raise TruncatedError(self)
-                self._next = ord(self._data[self._used])
+                self._next = byte_to_int(self._data[self._used])
                 self._used += 1
                 self._nextbits = 8
             copybits = min(bits - resultbits, self._nextbits)

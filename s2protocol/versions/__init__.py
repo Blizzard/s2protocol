@@ -69,4 +69,3 @@ def build(build_version):
     """
     base_path = os.path.dirname(__file__)
     return _import_protocol(base_path, 'protocol{0:05d}'.format(build_version))
-
