@@ -5,7 +5,6 @@ import s2protocol.build
 
 install_requires = [
     'mpyq >= 0.2.2',
-    'six >= 1.12.0, < 1.13',
 ]
 tests_require = [
     'tox',
