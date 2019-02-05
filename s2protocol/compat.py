@@ -1,10 +1,10 @@
-from six import PY3, binary_type
+import sys
 
 __all__ = 'byte_to_int',
 
 
 def byte_to_int(x):
-    if PY3 and isinstance(x, binary_type):
+    if sys.version_info.major == 3 and isinstance(x, bytes):
         return x
     else:
         return ord(x)
