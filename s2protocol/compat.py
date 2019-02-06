@@ -1,5 +1,4 @@
 import sys
-
 __all__ = 'byte_to_int',
 
 

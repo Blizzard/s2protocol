@@ -25,7 +25,6 @@ setup(
         's2protocol',
         's2protocol.versions',
     ],
-    scripts=['s2protocol/s2_cli.py'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
@@ -46,6 +45,7 @@ setup(
     entry_points={
         'console_scripts': [
             's2protocol = s2protocol.s2protocol:main',
+            's2_cli.py = s2protocol.s2_cli:main',
         ]
     },
 )
