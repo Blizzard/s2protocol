@@ -7,18 +7,14 @@ import pprint
 import re
 import json
 import binascii
-
-import mpyq
-
-import versions
-import diff
-import attributes as _attr
-
+import io
 import cProfile
 import pstats
-import StringIO
 
-
+import mpyq
+from .versions import build, list_all, latest
+from .diff import diff
+import s2protocol.attributes as _attr
 
 
 class EventFilter(object):
@@ -243,7 +239,7 @@ def main():
 
     # List all protocol versions
     if args.versions:
-        files = versions.list_all()
+        files = list_all()
         pattern = re.compile('^protocol([0-9]+).py$')
         captured = []
         for f in files:
@@ -260,7 +256,7 @@ def main():
         if len(version_list) < 2:
             print("--diff requires two versions separated by comma e.g. --diff=1,2")
             sys.exit(1)
-        diff.diff(version_list[0], version_list[1])
+        diff(version_list[0], version_list[1])
         return
 
     # Check/test the replay file
@@ -291,16 +287,17 @@ def main():
         
     # Read the protocol header, this can be read with any protocol
     contents = archive.header['user_data_header']['content']
-    header = versions.latest().decode_replay_header(contents)
+    header = latest().decode_replay_header(contents)
     if args.header:
         process_event(header)
 
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
     try:
-        protocol = versions.build(baseBuild)
+        protocol = build(baseBuild)
     except Exception as e:
-        print('Unsupported base build: {0} ({1!s})'.format(baseBuild, e), file=sys.stderr)
+        print('Unsupported base build: {0} ({1!s})'.format(baseBuild, e),
+              file=sys.stderr)
         sys.exit(1)
 
     # Process game metadata
@@ -367,7 +364,7 @@ def main():
         pr.disable()
         print("Profiler Results")
         print("----------------")
-        s = StringIO.StringIO()
+        s = io.StringIO()
         sortby = 'cumulative'
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
         ps.print_stats()

@@ -8,7 +8,7 @@ import sys
 import argparse
 import pprint
 
-import versions
+from .versions import build
 
 def diff_things(typeinfo_index, thing_a, thing_b):
     if type(thing_a) != type(thing_b):
@@ -56,8 +56,8 @@ def diff(protocol_a_ver, protocol_b_ver):
         )
     )
 
-    protocol_a = versions.build(protocol_a_ver)
-    protocol_b = versions.build(protocol_b_ver)
+    protocol_a = build(protocol_a_ver)
+    protocol_b = build(protocol_b_ver)
     count_a = len(protocol_a.typeinfos)
     count_b = len(protocol_b.typeinfos)
     print("Count of typeinfos: {} {}".format(count_a, count_b))
