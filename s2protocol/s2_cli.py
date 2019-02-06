@@ -47,7 +47,7 @@ class NDJSONOutputFilter(EventFilter):
         self._output = output
 
     def process(self, event):
-        print(self._output, json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True))
+        print(json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True), file=self._output)
         return event
 
 
