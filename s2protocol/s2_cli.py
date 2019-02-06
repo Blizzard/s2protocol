@@ -296,8 +296,8 @@ def main():
     baseBuild = header['m_version']['m_baseBuild']
     try:
         protocol = versions.build(baseBuild)
-    except Exception, e:
-        print('Unsupported base build: {0} ({1})'.format(baseBuild, str(e)),
+    except Exception as e:
+        print('Unsupported base build: {0} ({1!s})'.format(baseBuild, e),
               file=sys.stderr)
         sys.exit(1)
 
