@@ -19,6 +19,7 @@ if __name__ == '__main__':
 
 import s2protocol
 import test_versions
+import test_files
 
 
 def run():
@@ -35,6 +36,7 @@ def run():
 
     all_tests = [
         test_versions.suite(),
+        test_files.suite()
     ]
 
     if options.list:
