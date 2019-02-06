@@ -2,6 +2,8 @@
 
 [![Documentation Status](https://readthedocs.org/projects/s2protocol/badge/?version=latest)](http://s2protocol.readthedocs.io/en/latest/?badge=latest)
 
+[![Build Status](https://travis-ci.org/Blizzard/s2protocol.svg?branch=master)](https://travis-ci.org/Blizzard/s2protocol)
+
 s2protocol is a reference Python library and standalone tool to decode StarCraft II replay files into Python data structures.
 
 Currently s2protocol can decode these structures and events:
