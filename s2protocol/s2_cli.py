@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 
 import sys
 import argparse
@@ -16,6 +17,8 @@ import attributes as _attr
 import cProfile
 import pstats
 import StringIO
+
+
 
 
 class EventFilter(object):
@@ -297,8 +300,7 @@ def main():
     try:
         protocol = versions.build(baseBuild)
     except Exception as e:
-        print('Unsupported base build: {0} ({1!s})'.format(baseBuild, e),
-              file=sys.stderr)
+        print('Unsupported base build: {0} ({1!s})'.format(baseBuild, e), file=sys.stderr)
         sys.exit(1)
 
     # Process game metadata
