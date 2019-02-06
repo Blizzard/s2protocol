@@ -32,7 +32,7 @@ Some notes on tracker events:
 
 ```python
     unitIndex = event['m_firstUnitIndex']
-    for i in xrange(0, len(event['m_items']), 3):
+    for i in range(0, len(event['m_items']), 3):
         unitIndex += event['m_items'][i + 0]
         x = event['m_items'][i + 1] * 4
         y = event['m_items'][i + 2] * 4
