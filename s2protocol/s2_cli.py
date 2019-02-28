@@ -1,20 +1,44 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-import sys
 import argparse
-import pprint
-import re
-import json
 import binascii
-import io
 import cProfile
+import json
+import pprint
 import pstats
+import re
+import sys
 
-import mpyq
+from mpyq import MPQArchive
+
 from .versions import build, list_all, latest
 from .diff import diff
+from .compat import get_stream
 import s2protocol.attributes as _attr
+
+__all__ = (
+    'EventFilter', 'JSONOutputFilter', 'NDJSONOutputFilter',
+    'PrettyPrintFilter', 'StatCollectionFilter', 'TypeDumpFilter',
+    'cache_handle_uri', 'convert_fourcc', 'json_dump', 'main',
+    'process_details_data', 'process_init_data', 'process_scope_attributes',
+    'read_contents',
+)
+
+
+def json_dump(obj, indent=None):
+    def dispatch(o):
+        # Find all bytes(str in Python2) to decode with ISO-8850-1
+        if isinstance(o, dict):
+            return {k: dispatch(v) for k, v in o.items()}
+        elif isinstance(o, list):
+            return [dispatch(v) for v in o]
+        elif isinstance(o, bytes):
+            return o.decode('ISO-8859-1')
+        else:
+            return o
+
+    return json.dumps(dispatch(obj), indent=indent)
 
 
 class EventFilter(object):
@@ -33,7 +57,7 @@ class JSONOutputFilter(EventFilter):
         self._output = output
 
     def process(self, event):
-        print(json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True, indent=4))
+        print(json_dump(event, indent=4), file=self._output)
         return event
 
 
@@ -43,7 +67,7 @@ class NDJSONOutputFilter(EventFilter):
         self._output = output
 
     def process(self, event):
-        print(json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True), file=self._output)
+        print(json_dump(event), file=self._output)
         return event
 
 
@@ -112,7 +136,7 @@ def cache_handle_uri(handle):
     """
     Convert a 'cache handle' from a binary string to a string URI
     """
-    handle_hex = binascii.b2a_hex(handle)
+    handle_hex = binascii.b2a_hex(handle).decode()
     purpose = convert_fourcc(handle_hex[0:8]) # first 4 bytes
     region = convert_fourcc(handle_hex[8:16]) # next 4 bytes
     content_hash = handle_hex[16:]
@@ -264,7 +288,7 @@ def main():
         print(".S2Replay file not specified")
         sys.exit(1)
 
-    archive = mpyq.MPQArchive(args.replay_file)
+    archive = MPQArchive(args.replay_file)
     
     filters = []
 
@@ -364,7 +388,7 @@ def main():
         pr.disable()
         print("Profiler Results")
         print("----------------")
-        s = io.StringIO()
+        s = get_stream()
         sortby = 'cumulative'
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
         ps.print_stats()
