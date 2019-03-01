@@ -13,4 +13,3 @@ install:
 # command to run tests
 script:
   - tox
-  - python s2_cli.py --all --ndjson --profile tests\s2replaystatsdata\2018_05_17_Z_Raphtor_VS_T_Tocon.SC2Replay
