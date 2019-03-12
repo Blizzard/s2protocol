@@ -278,14 +278,15 @@ def main():
     if args.diff and args.diff is not None:
         version_list = args.diff.split(',')
         if len(version_list) < 2:
-            print("--diff requires two versions separated by comma e.g. --diff=1,2")
+            print("--diff requires two versions separated by comma e.g. --diff=1,2",
+                  file=sys.stderr)
             sys.exit(1)
         diff(version_list[0], version_list[1])
         return
 
     # Check/test the replay file
     if args.replay_file is None:
-        print(".S2Replay file not specified")
+        print(".S2Replay file not specified", file=sys.stderr)
         sys.exit(1)
 
     archive = MPQArchive(args.replay_file)
