@@ -92,7 +92,7 @@ class TypeDumpFilter(EventFilter):
                 return decoded
             elif type(value) is dict:
                 decoded = {}
-                for key, inner_value in value.iteritems():
+                for key, inner_value in value.items():
                     decoded[key] = recurse_into(inner_value)
                 return decoded
             return (type(value).__name__, value)
@@ -115,7 +115,7 @@ class StatCollectionFilter(EventFilter):
 
     def finish(self):
         print('Name, Count, Bits')
-        for name, stat in sorted(self._event_stats.iteritems(), key=lambda x: x[1][1]):
+        for name, stat in sorted(self._event_stats.items(), key=lambda x: x[1][1]):
             print('"{:s}", {:d}, {:d}'.format(name, stat[0], stat[1] / 8))
 
 
@@ -182,10 +182,10 @@ def process_scope_attributes(all_scopes, event_fn):
         attr_id_to_name[_attr.__dict__.get(sym)] = sym.lower()
 
     # Each scope represents a slot in the lobby
-    for scope, scope_dict in all_scopes.iteritems():
+    for scope, scope_dict in all_scopes.items():
         scope_doc = { 'scope': scope }
         # Convert all other attributes to symbolic representation
-        for attr_id, val_dict in scope_dict.iteritems():
+        for attr_id, val_dict in scope_dict.items():
             val = val_dict[0]['value'] 
             attr_name = attr_id_to_name.get(attr_id, None)
             if attr_name is not None:
