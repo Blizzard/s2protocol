@@ -9,9 +9,9 @@ import binascii
 
 import mpyq
 
-import versions
-import diff
-import attributes as _attr
+from s2protocol import versions
+from s2protocol import diff
+from s2protocol import attributes as _attr
 
 import cProfile
 import pstats
