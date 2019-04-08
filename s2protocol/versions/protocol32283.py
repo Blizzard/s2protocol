@@ -325,7 +325,7 @@ tracker_event_types = {
 # needed these values should be tested against for None
 
 # The typeid of the NNet.Replay.Tracker.EEventId enum.
-tracker_eventid_typeid = 2 
+tracker_eventid_typeid = 2
 
 # The typeid of NNet.SVarUint32 (the type used to encode gameloop deltas).
 svaruint32_typeid = 7
