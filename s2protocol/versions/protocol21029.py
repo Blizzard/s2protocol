@@ -169,7 +169,6 @@ typeinfos = [
     ('_struct',[[('m_recipient',17,-3),('m_string',22,-2)]]),  #142
     ('_struct',[[('m_recipient',17,-3),('m_point',67,-2)]]),  #143
     ('_struct',[[('m_progress',66,-2)]]),  #144
-    ('_struct',[[('m_playerId',37,-1)]]),  #145
 ]
 
 # Map from protocol NNet.Game.*Event eventid to (typeid, name)
@@ -274,13 +273,13 @@ tracker_event_types = {
 # needed these values should be tested against for None
 
 # The typeid of the NNet.Replay.Tracker.EEventId enum.
-tracker_eventid_typeid = None 
+tracker_eventid_typeid = None
 
 # The typeid of NNet.SVarUint32 (the type used to encode gameloop deltas).
 svaruint32_typeid = 6
 
 # The typeid of NNet.Replay.SGameUserId (the type used to encode player ids).
-replay_userid_typeid = 145
+replay_userid_typeid = None
 
 # The typeid of NNet.Replay.SHeader (the type used to store replay game version and length).
 replay_header_typeid = 11
