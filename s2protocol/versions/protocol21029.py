@@ -293,7 +293,7 @@ replay_initdata_typeid = 55
 
 def _varuint32_value(value):
     # Returns the numeric value from a SVarUint32 instance.
-    for k,v in value.iteritems():
+    for v in value.values():
         return v
     return 0
 
@@ -316,7 +316,7 @@ def _decode_event_stream(decoder, eventid_typeid, event_types, decode_user_id):
         eventid = decoder.instance(eventid_typeid)
         typeid, typename = event_types.get(eventid, (None, None))
         if typeid is None:
-            raise CorruptedError('eventid(%d) at %s' % (eventid, decoder))
+            raise CorruptedError('eventid({}) at {}'.format(eventid, decoder))
 
         # decode the event struct instance
         event = decoder.instance(typeid)
