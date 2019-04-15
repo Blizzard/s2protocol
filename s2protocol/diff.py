@@ -8,7 +8,7 @@ import sys
 import argparse
 import pprint
 
-from .versions import build
+from s2protocol.versions import build
 
 def diff_things(typeinfo_index, thing_a, thing_b):
     if type(thing_a) != type(thing_b):

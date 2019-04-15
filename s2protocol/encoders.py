@@ -20,7 +20,7 @@
 
 import struct
 
-from .compat import byte_to_int
+from s2protocol.compat import byte_to_int
 
 class IncompleteError(Exception):
     pass

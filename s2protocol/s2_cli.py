@@ -12,9 +12,9 @@ import sys
 
 from mpyq import MPQArchive
 
-from .versions import build, list_all, latest
-from .diff import diff
-from .compat import get_stream
+from s2protocol.versions import build, list_all, latest
+from s2protocol.diff import diff
+from s2protocol.compat import get_stream
 import s2protocol.attributes as _attr
 
 __all__ = (
