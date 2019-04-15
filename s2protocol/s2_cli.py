@@ -1,21 +1,44 @@
 #!/usr/bin/env python
+from __future__ import print_function
 
-import sys
 import argparse
-import pprint
-import re
-import json
 import binascii
-
-import mpyq
-
-import versions
-import diff
-import attributes as _attr
-
 import cProfile
+import json
+import pprint
 import pstats
-import StringIO
+import re
+import sys
+
+from mpyq import MPQArchive
+
+from .versions import build, list_all, latest
+from .diff import diff
+from .compat import get_stream
+import s2protocol.attributes as _attr
+
+__all__ = (
+    'EventFilter', 'JSONOutputFilter', 'NDJSONOutputFilter',
+    'PrettyPrintFilter', 'StatCollectionFilter', 'TypeDumpFilter',
+    'cache_handle_uri', 'convert_fourcc', 'json_dump', 'main',
+    'process_details_data', 'process_init_data', 'process_scope_attributes',
+    'read_contents',
+)
+
+
+def json_dump(obj, indent=None):
+    def dispatch(o):
+        # Find all bytes(str in Python2) to decode with ISO-8850-1
+        if isinstance(o, dict):
+            return {k: dispatch(v) for k, v in o.items()}
+        elif isinstance(o, list):
+            return [dispatch(v) for v in o]
+        elif isinstance(o, bytes):
+            return o.decode('ISO-8859-1')
+        else:
+            return o
+
+    return json.dumps(dispatch(obj), indent=indent)
 
 
 class EventFilter(object):
@@ -34,7 +57,7 @@ class JSONOutputFilter(EventFilter):
         self._output = output
 
     def process(self, event):
-        print >> self._output, json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True, indent=4)
+        print(json_dump(event, indent=4), file=self._output)
         return event
 
 
@@ -44,7 +67,7 @@ class NDJSONOutputFilter(EventFilter):
         self._output = output
 
     def process(self, event):
-        print >> self._output, json.dumps(event, encoding='ISO-8859-1', ensure_ascii=True)
+        print(json_dump(event), file=self._output)
         return event
 
 
@@ -69,7 +92,7 @@ class TypeDumpFilter(EventFilter):
                 return decoded
             elif type(value) is dict:
                 decoded = {}
-                for key, inner_value in value.iteritems():
+                for key, inner_value in value.items():
                     decoded[key] = recurse_into(inner_value)
                 return decoded
             return (type(value).__name__, value)
@@ -91,9 +114,9 @@ class StatCollectionFilter(EventFilter):
         return event
 
     def finish(self):
-        print >> sys.stdout, 'Name, Count, Bits'
-        for name, stat in sorted(self._event_stats.iteritems(), key=lambda x: x[1][1]):
-            print >> sys.stdout, '"%s", %d, %d' % (name, stat[0], stat[1] / 8)
+        print('Name, Count, Bits')
+        for name, stat in sorted(self._event_stats.items(), key=lambda x: x[1][1]):
+            print('"{:s}", {:d}, {:d}'.format(name, stat[0], stat[1] / 8))
 
 
 def convert_fourcc(fourcc_hex):
@@ -102,7 +125,7 @@ def convert_fourcc(fourcc_hex):
     represpentation to a string.
     """
     s = []
-    for i in xrange(0, 7, 2):
+    for i in range(0, 7, 2):
         n = int(fourcc_hex[i:i+2], 16)
         if n is not 0:
             s.append(chr(n))
@@ -113,7 +136,7 @@ def cache_handle_uri(handle):
     """
     Convert a 'cache handle' from a binary string to a string URI
     """
-    handle_hex = binascii.b2a_hex(handle)
+    handle_hex = binascii.b2a_hex(handle).decode()
     purpose = convert_fourcc(handle_hex[0:8]) # first 4 bytes
     region = convert_fourcc(handle_hex[8:16]) # next 4 bytes
     content_hash = handle_hex[16:]
@@ -159,10 +182,10 @@ def process_scope_attributes(all_scopes, event_fn):
         attr_id_to_name[_attr.__dict__.get(sym)] = sym.lower()
 
     # Each scope represents a slot in the lobby
-    for scope, scope_dict in all_scopes.iteritems():
+    for scope, scope_dict in all_scopes.items():
         scope_doc = { 'scope': scope }
         # Convert all other attributes to symbolic representation
-        for attr_id, val_dict in scope_dict.iteritems():
+        for attr_id, val_dict in scope_dict.items():
             val = val_dict[0]['value'] 
             attr_name = attr_id_to_name.get(attr_id, None)
             if attr_name is not None:
@@ -240,32 +263,33 @@ def main():
 
     # List all protocol versions
     if args.versions:
-        files = versions.list_all()
+        files = list_all()
         pattern = re.compile('^protocol([0-9]+).py$')
         captured = []
         for f in files:
             captured.append(pattern.match(f).group(1))
             if len(captured) == 8:
-                print >> sys.stdout, captured[0:8]
+                print(captured[0:8])
                 captured = []
-        print >> sys.stdout, captured
+        print(captured)
         return
 
     # Diff two protocols
     if args.diff and args.diff is not None:
         version_list = args.diff.split(',')
         if len(version_list) < 2:
-            print >> sys.stderr, "--diff requires two versions separated by comma e.g. --diff=1,2"
+            print("--diff requires two versions separated by comma e.g. --diff=1,2",
+                  file=sys.stderr)
             sys.exit(1)
-        diff.diff(version_list[0], version_list[1])
+        diff(version_list[0], version_list[1])
         return
 
     # Check/test the replay file
     if args.replay_file is None:
-        print >> sys.stderr, ".S2Replay file not specified"
+        print(".S2Replay file not specified", file=sys.stderr)
         sys.exit(1)
 
-    archive = mpyq.MPQArchive(args.replay_file)
+    archive = MPQArchive(args.replay_file)
     
     filters = []
 
@@ -288,16 +312,17 @@ def main():
         
     # Read the protocol header, this can be read with any protocol
     contents = archive.header['user_data_header']['content']
-    header = versions.latest().decode_replay_header(contents)
+    header = latest().decode_replay_header(contents)
     if args.header:
         process_event(header)
 
     # The header's baseBuild determines which protocol to use
     baseBuild = header['m_version']['m_baseBuild']
     try:
-        protocol = versions.build(baseBuild)
-    except Exception, e:
-        print >> sys.stderr, 'Unsupported base build: {0} ({1})'.format(baseBuild, str(e))
+        protocol = build(baseBuild)
+    except Exception as e:
+        print('Unsupported base build: {0} ({1!s})'.format(baseBuild, e),
+              file=sys.stderr)
         sys.exit(1)
 
     # Process game metadata
@@ -362,13 +387,13 @@ def main():
 
     if args.profile:
         pr.disable()
-        print "Profiler Results"
-        print "----------------"
-        s = StringIO.StringIO()
+        print("Profiler Results")
+        print("----------------")
+        s = get_stream()
         sortby = 'cumulative'
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
         ps.print_stats()
-        print s.getvalue()
+        print(s.getvalue())
 
 if __name__ == '__main__':
     main()

@@ -495,7 +495,7 @@ def decode_replay_attributes_events(contents):
             value['namespace'] = buffer.read_bits(32)
             value['attrid'] = attrid = buffer.read_bits(32)
             scope = buffer.read_bits(8)
-            value['value'] = buffer.read_aligned_bytes(4)[::-1].strip('\x00')
+            value['value'] = buffer.read_aligned_bytes(4)[::-1].strip(b'\x00')
             if not scope in attributes['scopes']:
                 attributes['scopes'][scope] = {}
             if not attrid in attributes['scopes'][scope]:
