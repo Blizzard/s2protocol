@@ -19,8 +19,8 @@ class FilesTestCase(unittest.TestCase):
         base_build = header['m_version']['m_baseBuild']
         try:
             protocol = versions.build(base_build)
-        except Exception, e:
-            self.fail('Unsupported base build: {0} ({1})'.format(base_build, str(e)))
+        except Exception as e:
+            self.fail('Unsupported base build: {0} ({1!s})'.format(base_build, e))
 
         required_internal_files = ['replay.details',
                           'replay.details.backup',

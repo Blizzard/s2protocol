@@ -20,6 +20,8 @@
 
 import struct
 
+from .compat import byte_to_int
+
 class IncompleteError(Exception):
     pass
 
@@ -68,7 +70,7 @@ class BitPackedBuffer:
     def write_unaligned_bytes(self, data):
         assert isinstance(data, str)
         for c in data:
-            self.write_bits(ord(c), 8)
+            self.write_bits(byte_to_int(c), 8)
 
 class BitPackedEncoder:
     def __init__(self, output, typeinfos):
@@ -112,7 +114,7 @@ class BitPackedEncoder:
     def _choice(self, value, bounds, fields):
         #assert isinstance(value, dict)
         assert len(value) == 1
-        for tag, field in fields.iteritems():
+        for tag, field in fields.items():
             if field[0] in value:
                 self._int(tag, bounds)
                 self.instance(value[field[0]], field[1])
@@ -222,7 +224,7 @@ class VersionedEncoder:
         #assert isinstance(value, dict)
         assert len(value) == 1
         self._write_skip(3)
-        for tag, field in fields.iteritems():
+        for tag, field in fields.items():
             if field[0] in value:
                 self._vint(tag)
                 self.instance(value[field[0]], field[1])
