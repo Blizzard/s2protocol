@@ -82,3 +82,5 @@ This Java implementation is part of the open source [Scelight](https://github.co
 **Rust Nom MPQ parser:** https://github.com/sebosp/nom-mpq
 
 **Rust Nom s2protocol parser:** https://github.com/sebosp/s2protocol-rs
+
+**Visualization of Replays with wgpu:** https://github.com/sebosp/swarmy
