@@ -76,3 +76,9 @@ This Java implementation is part of the open source [Scelight](https://github.co
 **Java MPQ parser:** https://github.com/icza/scelight/tree/master/src-app-libs/hu/belicza/andras/mpq
 
 **Java s2protocol:** https://github.com/icza/scelight/tree/master/src-app/hu/scelight/sc2/rep/s2prot
+
+### Rust
+
+**Rust Nom MPQ parser:** https://github.com/sebosp/nom-mpq
+
+**Rust Nom s2protocol parser:** https://github.com/sebosp/s2protocol-rs
