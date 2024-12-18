@@ -1,7 +1,6 @@
-
 import os
 import re
-import imp
+import importlib.util
 import sys
 
 
@@ -22,13 +21,13 @@ def _import_protocol(base_path, protocol_module_name):
     # If any of the following calls raises an exception,
     # there's a problem we can't handle -- let the caller handle it.
     #
-    fp, pathname, description = imp.find_module(protocol_module_name, [base_path])
-    try:
-        return imp.load_module(protocol_module_name, fp, pathname, description)
-    finally:
-        # Since we may exit via an exception, close fp explicitly.
-        if fp:
-            fp.close()
+    spec = importlib.util.find_spec(protocol_module_name, [base_path])
+    if spec is not None:
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    else:
+        raise ImportError(f"Can't find {protocol_module_name}")
 
 
 def list_all(base_path=None):
@@ -38,8 +37,7 @@ def list_all(base_path=None):
     if base_path is None:
         base_path = os.path.dirname(__file__)
     pattern = re.compile('.*protocol[0-9]+.py$')
-    files = [ f for f in os.listdir(base_path) \
-        if pattern.match(f) ]
+    files = [f for f in os.listdir(base_path) if pattern.match(f)]
     files.sort()
     return files
 
@@ -48,7 +46,7 @@ def latest():
     """
     Import the latest protocol version in the versions module (directory)
     """
-    # Find matchng protocol version files
+    # Find matching protocol version files
     base_path = os.path.dirname(__file__)
     files = list_all(base_path)
 
@@ -62,11 +60,9 @@ def latest():
     return _import_protocol(base_path, module_name)
 
 
-
 def build(build_version):
     """
     Get the module for a specific build version
     """
     base_path = os.path.dirname(__file__)
     return _import_protocol(base_path, 'protocol{0:05d}'.format(build_version))
-
