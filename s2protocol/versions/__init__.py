@@ -15,18 +15,8 @@ def _import_protocol(base_path, protocol_module_name):
 
     requested_protocol = protocol_module_name
     if protocol_module_name not in PROTOCOLS:
-        requested_version = protocol_version(protocol_module_name)
-        candidates = [
-            p for p in PROTOCOLS
-            if protocol_version(p) <= requested_version
-        ]
-        if not candidates:
-            raise ImportError(
-                f"No compatible protocol found for '{protocol_module_name}'"
-            )
-
         fallback_module_name = max(
-            candidates,
+            PROTOCOLS,
             key=protocol_version
         )
         logger = logging.getLogger(__name__)
@@ -35,7 +25,7 @@ def _import_protocol(base_path, protocol_module_name):
             requested_protocol,
             fallback_module_name,
         )
-        protocol_module_name = fallback_module_name
+        protocol_module_name = fallback_module_name.split('.')[0]
 
 
     # Try to return the module if it's been loaded already
