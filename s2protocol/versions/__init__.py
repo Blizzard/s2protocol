@@ -1,7 +1,7 @@
 
 import os
 import re
-import imp
+import importlib
 import sys
 
 
@@ -9,8 +9,8 @@ def _import_protocol(base_path, protocol_module_name):
     """
     Import a module from a base path, used to import protocol modules.
 
-    This implementation is derived from the __import__ example here:
-        https://docs.python.org/2/library/imp.html
+    This implementation is derived from the import_module example here:
+        https://docs.python.org/3/library/importlib.html#approximating-importlib-import-module
     """
 
     # Try to return the module if it's been loaded already
@@ -19,16 +19,21 @@ def _import_protocol(base_path, protocol_module_name):
     except KeyError:
         pass
 
-    # If any of the following calls raises an exception,
-    # there's a problem we can't handle -- let the caller handle it.
-    #
-    fp, pathname, description = imp.find_module(protocol_module_name, [base_path])
-    try:
-        return imp.load_module(protocol_module_name, fp, pathname, description)
-    finally:
-        # Since we may exit via an exception, close fp explicitly.
-        if fp:
-            fp.close()
+    # Otherwise try to load the module
+    spec = importlib.util.spec_from_file_location(
+        protocol_module_name,
+        os.path.join(base_path, protocol_module_name+'.py')
+    )
+    module = importlib.util.module_from_spec(spec)
+
+    # If the module does not exist, raise an exception and let the
+    # caller handle it
+    if( not os.path.exists(spec.origin) ):
+        raise ImportError("No module named '{}'".format(protocol_module_name))
+
+    sys.modules[protocol_module_name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 def list_all(base_path=None):
