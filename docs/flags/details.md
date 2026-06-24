@@ -48,7 +48,7 @@ else if (strpos($cache_handle,hash("sha256","Standard Data: Liberty.SC2Mod")) !=
 (aka team games if a player leaves they dont really know the exact ending of the game). 1 = 1st, 2 = 2nd, ext
 
 **m_playerList->m_toon->m_region**
-> 1 = us, 2 = eu, 3 = kr, 4 = sea, 5 = cn, 98 = local battle.net server (WCS, ext)
+> 1 = US, 2 = EU, 3 = KR, 5 = CN, 6 = SG (SEA; South East Asia), 98 = local battle.net server (WCS, ext)
 
 ####Example Reponse
 ```
