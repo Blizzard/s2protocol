@@ -121,8 +121,8 @@ class StatCollectionFilter(EventFilter):
 
 def convert_fourcc(fourcc_hex):
     """
-    Convert a hexidecimal [fourcc](https://en.wikipedia.org/wiki/FourCC) 
-    represpentation to a string.
+    Convert a hexadecimal [fourcc](https://en.wikipedia.org/wiki/FourCC) 
+    representation to a string.
     """
     s = []
     for i in range(0, 7, 2):
@@ -377,7 +377,7 @@ def main():
             process_event(attributes)
         
         # Convert attributes to higher level requested data, will
-        # call prcess_event for each new event that it creates
+        # call process_event for each new event that it creates
         if args.attributeparse:
             process_scope_attributes(attributes['scopes'], process_event)
             
