@@ -265,7 +265,7 @@ replay_header_typeid = 11
 # The typeid of NNet.Game.SDetails (the type used to store overall replay details).
 game_details_typeid = 29
 
-# The typeid of NNet.Replay.SInitData (the type used to store the inital lobby).
+# The typeid of NNet.Replay.SInitData (the type used to store the initial lobby).
 replay_initdata_typeid = 54
 
 

@@ -48,7 +48,7 @@ def latest():
     """
     Import the latest protocol version in the versions module (directory)
     """
-    # Find matchng protocol version files
+    # Find matching protocol version files
     base_path = os.path.dirname(__file__)
     files = list_all(base_path)
 
