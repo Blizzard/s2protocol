@@ -33,7 +33,7 @@ The initdata flag gives the lobby state with some basic information about the pl
 
 #### ---messageevents
 The messageevents flag gives all the chat messages in the game.   
-[More Information](flags/initdata.md)
+[More Information](flags/messageevents.md)
 
 
 
